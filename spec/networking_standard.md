@@ -141,7 +141,7 @@ Note: The [ID] for each sub-resource is taken from the device itself (correspond
 - Custom attributes should be added only to the root level model.
 - All attributes are of type String unless mentioned otherwise
 
-** [Vendor] [OS] Switch or [Vendor] [OS] Router or [Vendor] [OS] Wireless Controller **
+##### [Vendor] [OS] Switch or [Vendor] [OS] Router or [Vendor] [OS] Wireless Controller
 
 Attribute Name | Details | User input?
 --- | --- | --
@@ -171,7 +171,7 @@ Sessions Concurrency Limit | Attributes of type Numeric. Default is 1 (no concur
 
 
 
-** Generic Chassis **
+#####  Generic Chassis
 
 Attribute Name | Details | User input?
 --- | --- | --
@@ -179,16 +179,7 @@ Model | | No
 Serial Number || No
 
 
-** Generic Module **
-
-Attribute Name | Details | User input?
---- | --- | --
-Model | | No
-Version | | No
-Serial Number || No
-
-
-** Generic Sub Module **
+#####  Generic Module
 
 Attribute Name | Details | User input?
 --- | --- | --
@@ -197,7 +188,16 @@ Version | | No
 Serial Number || No
 
 
-** Generic Port **
+##### Generic Sub Module
+
+Attribute Name | Details | User input?
+--- | --- | --
+Model | | No
+Version | | No
+Serial Number || No
+
+
+##### Generic Port
 
 Attribute Name | Details | User input?
 --- | --- | --
@@ -214,7 +214,7 @@ Protocol Type | Default values is Transparent (=”0”) | No
 Auto Negotiation | True or False | No
 
 
-** Generic Port Channel **
+#####  Generic Port Channel
 
 Attribute Name | Details | User input?
 --- | --- | --
@@ -227,7 +227,7 @@ Protocol Type | Default values is Transparent (=”0”) | No
 
 
 
-** Generic Power Port **
+#####  Generic Power Port
 
 Attribute Name | Details | User input?
 --- | --- | --
