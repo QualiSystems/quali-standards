@@ -1,6 +1,6 @@
 # Networking Shell Standard
 
-#### Version 1.0.0
+#### Version 3.2.0
 
 
 ## Introduction
@@ -13,6 +13,7 @@ The standard defines the Shell’s data model, commands and a set of guidelines 
 
 Version | Date | Notes
 --- | --- | ---
+3.2.0 | 2016-07-14 | Added a new attribute named "VRF Management Name" on the root model. The attribute will be filled in by the administrator (optional). Save and Restore commands will use the value in this attribute in case no such input was passed to the command.
 3.1.0 | 2016-06-23 | Added a new data model for Wireless Controller (in addition to Switch and Router).
 3.0.0 | 2016-06-09 | The name and address of the Power Port has changed from "PP[ID]" to "PP[ContainerID][ID]" in order to support devices with power ports that have the same ID but are under different containers. **This change isn't backwards compatible.**
 2.1.0 | 2016-05-29 | 1) Added an optional input parameter (VRF Management Name) to the Save and Restore commands; used to share same/overlapping sub-net on the same core. 2) Added support for concurrent sessions to the device (concurrent execution of commands), along with an attribute (Sessions Concurrency Limit) that allows the admin to set the maximal no. of concurrent sessions the shell can use.
@@ -138,6 +139,7 @@ Note: The [ID] for each sub-resource is taken from the device itself (correspond
 - It is possible to customize the attribute rules selection after importing the Shell to CloudShell.
 - Attributes shouldn’t be removed.
 - Custom attributes should be added only to the root level model.
+- All attributes are of type String unless mentioned otherwise
 
 ** [Vendor] [OS] Switch or [Vendor] [OS] Router or [Vendor] [OS] Wireless Controller **
 
@@ -255,7 +257,7 @@ Note that the connectivity ApplyConnectivityChanges command behaves differently 
     - Inputs
         - Configuration Type – optional, if empty the default value will be taken. Possible values – StartUp or Running Default value – Running
         - Folder Path – the path in which the configuration file will be saved. Won’t include the name of the file but only the folder. This input is optional and in case this input is empty the value will be taken from the “Backup Location” attribute on the root resource. The path should include the protocol type (for example “tftp://asdf”)
-        - VRF Management Name - optional, no default. VRF (Virtual routing and Forwarding) is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices.
+        - VRF Management Name - optional, no default. VRF (Virtual routing and Forwarding) is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. In case no value is passed in this input the command will use the value in the "VRF Management Name" attribute on the root model (which can be empty).
 
    - Output: "<FullFileName>,"
    - The configuration file name should be “[ResourceName]-[ConfigurationType]-[DDMMYY]-[HHMMSS]”
@@ -266,7 +268,7 @@ Note that the connectivity ApplyConnectivityChanges command behaves differently 
          - Path – the path to the configuration file, including the configuration file name. The path should include the protocol type (for example “tftp://asdf”). This input is mandatory.
          - Restore Method – optional, if empty the default value will be taken. Possible values – Append or Override Default value – Override
          - Configuration Type - mandatory, no default. Possible values - StartUp or Running
-         - VRF Management Name - optional, no default. VRF (Virtual routing and Forwarding) is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices.
+         - VRF Management Name - optional, no default. VRF (Virtual routing and Forwarding) is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. In case no value is passed in this input the command will use the value in the "VRF Management Name" attribute on the root model (which can be empty).
 
 
  - ** Load Firmware ** – loads a firmware onto the device
