@@ -174,7 +174,7 @@ Sessions Concurrency Limit | Attributes of type Numeric. Default is 1 (no concur
 #####  Generic Chassis
 
 Attribute Name | Details | User input?
---- | --- | --
+--- | --- | ---
 Model | | No
 Serial Number | | No
 
@@ -182,7 +182,7 @@ Serial Number | | No
 #####  Generic Module
 
 Attribute Name | Details | User input?
---- | --- | --
+--- | --- | ---
 Model | | No
 Version | | No
 Serial Number | | No
@@ -191,7 +191,7 @@ Serial Number | | No
 ##### Generic Sub Module
 
 Attribute Name | Details | User input?
---- | --- | --
+--- | --- | ---
 Model | | No
 Version | | No
 Serial Number | | No
@@ -200,7 +200,7 @@ Serial Number | | No
 ##### Generic Port
 
 Attribute Name | Details | User input?
---- | --- | --
+--- | --- | ---
 MAC Address | | No
 L2 Protocol Type | Such as POS, Serial | No
 IPv4 Address | | No
@@ -217,7 +217,7 @@ Auto Negotiation | True or False | No
 #####  Generic Port Channel
 
 Attribute Name | Details | User input?
---- | --- | --
+--- | --- | ---
 Associated Ports | value in the form “[portResourceName],…”, for example “GE0-0-0-1,GE0-0-0-2” | No
 IPv4 Address | | No
 IPv6 Address | | No
@@ -230,7 +230,7 @@ Protocol Type | Default values is Transparent (=”0”) | No
 #####  Generic Power Port
 
 Attribute Name | Details | User input?
---- | --- | --
+--- | --- | ---
 Model | | No
 Serial Number || No
 Version | | No
