@@ -176,7 +176,7 @@ Sessions Concurrency Limit | Attributes of type Numeric. Default is 1 (no concur
 Attribute Name | Details | User input?
 --- | --- | --
 Model | | No
-Serial Number || No
+Serial Number | | No
 
 
 #####  Generic Module
@@ -185,7 +185,7 @@ Attribute Name | Details | User input?
 --- | --- | --
 Model | | No
 Version | | No
-Serial Number || No
+Serial Number | | No
 
 
 ##### Generic Sub Module
@@ -194,7 +194,7 @@ Attribute Name | Details | User input?
 --- | --- | --
 Model | | No
 Version | | No
-Serial Number || No
+Serial Number | | No
 
 
 ##### Generic Port
