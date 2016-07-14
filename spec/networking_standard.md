@@ -117,7 +117,7 @@ Addition or removal of ports from the port channel will require execution of Aut
 
 #### Resource Name and Address
 Family | Model | Resource Name | Resource Address
---- | --- | -- | --
+--- | --- | --- | ---
 Switch | [Vendor] [OS] Switch | (user defined) | (user defined - IP)
 Router | [Vendor] [OS] Router | (user defined) | (user defined - IP)
 Wireless Controller | [Vendor] [OS] Wireless Controller | (user defined) | (user defined - IP)
