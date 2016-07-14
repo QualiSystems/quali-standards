@@ -144,7 +144,7 @@ Note: The [ID] for each sub-resource is taken from the device itself (correspond
 ##### [Vendor] [OS] Switch or [Vendor] [OS] Router or [Vendor] [OS] Wireless Controller
 
 Attribute Name | Details | User input?
---- | --- | --
+--- | --- | ---
 User | User with administrative privileges | Yes
 Password | Attribute of type Password | Yes
 Enable Password | Attribute of type Password | Yes
