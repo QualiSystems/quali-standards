@@ -47,7 +47,7 @@ The dependency to cloudshell-automation-api will be to the latest Patch version 
 ### Families & Models
 The networking shell standard supports both L2 (Switch), L3 (Router) and Wireless Controller.
 
-** Switch Data Model **
+#### Switch Data Model
 - Switch
  - Chassis
     - Module
@@ -59,7 +59,7 @@ The networking shell standard supports both L2 (Switch), L3 (Router) and Wireles
  - Port Channel
 
 
- ** Router Data Model **
+#### Router Data Model
  - Router
   - Chassis
      - Module
@@ -71,7 +71,7 @@ The networking shell standard supports both L2 (Switch), L3 (Router) and Wireles
   - Port Channel
 
 
-  ** Wireless Controller Data Model **
+#### Wireless Controller Data Model
   - Router
    - Chassis
       - Module
@@ -82,7 +82,9 @@ The networking shell standard supports both L2 (Switch), L3 (Router) and Wireles
       - Power Port
    - Port Channel
 
-** Example **
+
+##### Example:
+
 - Family: Switch, Model: Cisco NXOS Switch
  - Family: Chassis, Model: Generic Chassis
     - Family: Module, Model: Generic Module
