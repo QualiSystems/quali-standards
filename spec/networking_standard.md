@@ -240,7 +240,7 @@ Port Description | | No
 
 
 
-### commands
+## Commands
 Below is a list of all the commands that will be part of the standard Shell, their names and interfaces. Each networking Shell that will be released by Quali’s engineering will include implementation for all those commands.
 
 When creating a new shell according to the standard it is OK not to implement all commands and/or implement additional command, but a command with a functionality that fits one of the predefined list commands should be implemented according to the standard.
@@ -250,84 +250,94 @@ Command outputs: On failure an exception containing the error will be thrown and
 Note that the connectivity ApplyConnectivityChanges command behaves differently between Switches and Routers. In Switches, the ApplyConnectivityChanges command can configure VLAN Access or VLAN Trunk on a port, or clear the VLAN configuration from the port. In Routers, the ApplyConnectivityChanges command creates a sub-interface (which isn't modeled in CloudShell) on the port which allows traffic with the specified VLAN tags (both outer and inner) to pass via this port. Clearing the VLAN configuration from a port in a Router translates to removal of the sub-interfaces. This means that a device which is directly connected to a router can be connected only to VLAN service of type Trunk in CloudShell.
 
 
-- ** Autoload ** – queries the devices and loads the structure and attribute values into CloudShell.
+### Autoload
+Queries the devices and loads the structure and attribute values into CloudShell.
   - SNMP Based
 
 
 
-  - ** Save ** – creates a configuration file.
-    - Inputs
-        - Configuration Type – optional, if empty the default value will be taken. Possible values – StartUp or Running Default value – Running
-        - Folder Path – the path in which the configuration file will be saved. Won’t include the name of the file but only the folder. This input is optional and in case this input is empty the value will be taken from the “Backup Location” attribute on the root resource. The path should include the protocol type (for example “tftp://asdf”)
-        - VRF Management Name - optional, no default. VRF (Virtual routing and Forwarding) is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. In case no value is passed in this input the command will use the value in the "VRF Management Name" attribute on the root model (which can be empty).
+### Save
+Creates a configuration file.
+  - Inputs
+      - Configuration Type – optional, if empty the default value will be taken. Possible values – StartUp or Running Default value – Running
+      - Folder Path – the path in which the configuration file will be saved. Won’t include the name of the file but only the folder. This input is optional and in case this input is empty the value will be taken from the “Backup Location” attribute on the root resource. The path should include the protocol type (for example “tftp://asdf”)
+      - VRF Management Name - optional, no default. VRF (Virtual routing and Forwarding) is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. In case no value is passed in this input the command will use the value in the "VRF Management Name" attribute on the root model (which can be empty).
 
-   - Output: "<FullFileName>,"
-   - The configuration file name should be “[ResourceName]-[ConfigurationType]-[DDMMYY]-[HHMMSS]”
-
-
-   - ** Restore ** – restores a configuration file.
-     - Inputs
-         - Path – the path to the configuration file, including the configuration file name. The path should include the protocol type (for example “tftp://asdf”). This input is mandatory.
-         - Restore Method – optional, if empty the default value will be taken. Possible values – Append or Override Default value – Override
-         - Configuration Type - mandatory, no default. Possible values - StartUp or Running
-         - VRF Management Name - optional, no default. VRF (Virtual routing and Forwarding) is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. In case no value is passed in this input the command will use the value in the "VRF Management Name" attribute on the root model (which can be empty).
+ - Output: "<FullFileName>,"
+     - The configuration file name should be “[ResourceName]-[ConfigurationType]-[DDMMYY]-[HHMMSS]”
 
 
- - ** Load Firmware ** – loads a firmware onto the device
-     - CLI based
-     - Applies to the whole device, also in case of multi-chassis device
-     - Inputs:
-       - File Path
-       - Remote Host
+### Restore
+Restores a configuration file.
+   - Inputs
+       - Path – the path to the configuration file, including the configuration file name. The path should include the protocol type (for example “tftp://asdf”). This input is mandatory.
+       - Restore Method – optional, if empty the default value will be taken. Possible values – Append or Override Default value – Override
+       - Configuration Type - mandatory, no default. Possible values - StartUp or Running
+       - VRF Management Name - optional, no default. VRF (Virtual routing and Forwarding) is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. In case no value is passed in this input the command will use the value in the "VRF Management Name" attribute on the root model (which can be empty).
 
 
-   - ** Add_VLAN ** – configures VLAN on a port / port-channel
-       - Inputs:
-         - VLAN_Ranges - string input, Possible values – support a specific VLAN ID or VLAN range (in the format of “a-b,c”)
-         - VLAN_Mode, Possible values – access or trunk
-         - port – the full address of the port
-         - Additional_Info
-       - This command should be tagged as “connected command”
-       - This command should be hidden from the UI
-         - If Additional_Info = QNQ --> configuration mode is Q-in-Q.
+### Load Firmware
+Loads a firmware onto the device
+   - CLI based
+   - Applies to the whole device, also in case of multi-chassis device
+   - Inputs:
+     - File Path
+     - Remote Host
+
+
+### Add_VLAN
+Configures VLAN on a port / port-channel
+   - Inputs:
+     - VLAN_Ranges - string input, Possible values – support a specific VLAN ID or VLAN range (in the format of “a-b,c”)
+     - VLAN_Mode, Possible values – access or trunk
+     - port – the full address of the port
+     - Additional_Info
+   - This command should be tagged as “connected command”
+   - This command should be hidden from the UI
+     - If Additional_Info = QNQ --> configuration mode is Q-in-Q.
 If Additional_Info = QNQ,<ID/Range> --> configuration mode is Selective Q-in-Q according to the ID/Range (the syntax for the ID/Range is "a,b-c", for example "100-200,340,1000-2000" or just "200")
 If Additional_Info = empty --> configures VLAN in regular mode.
 
  Note - the "Add_VLAN" command won't exist in Shells which support CloudShell version 7.0 and above. It is replaced by the ApplyConnectivityChanges Command.
 
 
- - ** Remove_VLAN ** – clears VLAN configuration from a port / port-channel
-     - Inputs:
-       - VLAN_Ranges - string input - Possible values – support a specific VLAN ID or VLAN range (in the format of “a-b,c”)
-       - VLAN_Mode - Possible values – access or trunk
-       - port – the full address of the port
-       - Additional_Info
-     - This command should be tagged as “connected command”
-     - This command should be hidden from the UI
+### Remove_VLAN
+Clears VLAN configuration from a port / port-channel
+ - Inputs:
+   - VLAN_Ranges - string input - Possible values – support a specific VLAN ID or VLAN range (in the format of “a-b,c”)
+   - VLAN_Mode - Possible values – access or trunk
+   - port – the full address of the port
+   - Additional_Info
+ - This command should be tagged as “connected command”
+ - This command should be hidden from the UI
 
 Note - the "Remove_VLAN" command won't exist in Shells which support CloudShell version 7.0 and above. It is replaced by the ApplyConnectivityChanges Command.
 
 
-- ** Run Custom Command ** – executes any custom command entered by the user on the device
-    - Inputs:
-      - Custom command – the command itself. Note that commands that require a response aren’t supported
+### Run Custom Command
+Executes any custom command entered by the user on the device
+  - Inputs:
+    - Custom command – the command itself. Note that commands that require a response aren’t supported
 
 
-  - ** Run Custom Config Command ** – executes any custom config command entered by the user on the device.
-      - Inputs:
-        - Custom command – the command itself. Note that commands that require a response aren’t supported
-        - This command will be hidden from the UI and accessible only via API.
+### Run Custom Config Command
+Executes any custom config command entered by the user on the device.
+  - Inputs:
+    - Custom command – the command itself. Note that commands that require a response aren’t supported
+    - This command will be hidden from the UI and accessible only via API.
 
 
-  - ** Shutdown ** – sends a graceful shutdown to the device
-      - Inputs:
-        - Note that not all devices support a shutdown command. In such cases the command just wouldn’t be implemented
+### Shutdown
+Sends a graceful shutdown to the device
+  - Inputs:
+    - Note that not all devices support a shutdown command. In such cases the command just wouldn’t be implemented
 
-  - ** ApplyConnectivityChanges ** – configures VLANs on multiple ports or port-channels
-      - Inputs:
-        - Request – a JSON with bulk “add_vlan” or “remove_vlan” request. The request includes the list of ports and VLANs that should be configured or cleared on those ports. See separate article with the JSON schema and an example.
-      - Output: a JSON with the command’s response, should include success/fail per each connection request.
-      - This command is compatible with the connectivity in CloudShell 7.0 version and above.
+### ApplyConnectivityChanges
+Configures VLANs on multiple ports or port-channels
+  - Inputs:
+    - Request – a JSON with bulk “add_vlan” or “remove_vlan” request. The request includes the list of ports and VLANs that should be configured or cleared on those ports. See separate article with the JSON schema and an example.
+  - Output: a JSON with the command’s response, should include success/fail per each connection request.
+  - This command is compatible with the connectivity in CloudShell 7.0 version and above.
 
 
 Notes: (1) The ApplyConnectivityChanges command will be available in the Shell only when applicable in the device; (2) The standard doesn’t support different VLAN request to the same Switch/Router/Wireless-Controller port at the same time. For example connecting the same port to multiple VLAN services each with a different VLAN ID/range. When configuring VLAN ID/range on a port the assumption is that there is no other VLAN configured on it.         
