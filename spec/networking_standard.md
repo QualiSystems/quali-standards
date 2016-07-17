@@ -263,7 +263,7 @@ Creates a configuration file.
       - Folder Path – the path in which the configuration file will be saved. Won’t include the name of the file but only the folder. This input is optional and in case this input is empty the value will be taken from the “Backup Location” attribute on the root resource. The path should include the protocol type (for example “tftp://asdf”)
       - VRF Management Name - optional, no default. VRF (Virtual routing and Forwarding) is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. In case no value is passed in this input the command will use the value in the "VRF Management Name" attribute on the root model (which can be empty).
 
- - Output: "<FullFileName>,"
+  - Output: <FullFileName>
    - The configuration file name should be “[ResourceName]-[ConfigurationType]-[DDMMYY]-[HHMMSS]”
 
 
