@@ -460,7 +460,10 @@
       <Categories />
     </ResourceFamily>
   </ResourceFamilies>
-  <DriverDescriptors />
+  <DriverDescriptors>
       <DriverDescriptor Name="{{ cookiecutter.driver_name }}" DriverType="PythonDriver" />
+
+  </DriverDescriptors>
+
   <ScriptDescriptors />
 </DataModelInfo>
