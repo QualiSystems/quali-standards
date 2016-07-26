@@ -1,5 +1,5 @@
 from cloudshell.shell.core.resource_driver_interface import ResourceDriverInterface
-from cloudshell.shell.core.context import InitCommandContext, ResourceCommandContext
+from cloudshell.shell.core.driver_context import InitCommandContext, ResourceCommandContext
 
 
 class {{cookiecutter.driver_name}} (ResourceDriverInterface):
@@ -25,24 +25,114 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         """
         pass
 
-    def example_function(self, context):
+    def restore(self, context, path, config_type, restore_method, vrf):
         """
-        A simple example function
-        :param ResourceCommandContext context: the context the command runs on
-        """
-        pass
-
-    def example_function_with_params(self, context, user_param1, user_param2):
-        """
-        An example function that accepts two user parametesrs
-        :param ResourceCommandContext context: the context the command runs on
-        :param str user_param1: A user parameter
-        :param str user_param2: A user parameter
+        Restores a configuration file
+        :param ResourceCommandContext context: The context object for the command with resource and reservation info
+        :param str path: The path to the configuration file, including the configuration file name.
+        :param str config_type: Specify whether the file should update the startup or running config.
+         Value can one of the folowing 'Startup'|'Running'. Startup configuration is not supported on all
+         switches.
+        :param str restore_method: Determines whether the restore should append or override the current configuration.
+         Can be one of two possible values 'Append'|'Override'
+        :param str vrf: Optional. Virtual routing and Forwarding management name
         """
         pass
 
-    def _helper_function(self):
+    def save(self, context, folder_path, config_type, vrf=None):
         """
-        Private functions are always hidden, and will not be exposed to the end user
+        Creates a configuration file and saves it to the provided destination
+        :param ResourceCommandContext context: The context object for the command with resource and reservation info
+        :param str config_type: Specify whether the file should update the startup or running config. Value can one
+            of the folowing 'Startup'|'Running'. Startup configuration is not supported on all switches.
+        :param str folder_path: The path to the folder in which the configuration file will be saved. If empty value
+            should be taken from the resource 'Backup Location' attribute.
+        :param str vrf: Optional. Virtual routing and Forwarding management name
+        :return The configuration file name. Should follow the naming convention of [ResourceName]-[ConfigurationType]-[DDMMYY]-[HHMMSS]
+        :rtype: str
         """
         pass
+
+    def load_firmware(self, context, remote_host, file_path):
+        """
+        Upload and updates firmware on the resource
+        :param ResourceCommandContext context: The context object for the command with resource and reservation info
+        :param str remote_host: path to tftp:// server where firmware file is stored
+        :param str file_path: firmware file name
+        """
+        pass
+
+    def send_custom_command(self, context, command):
+        """
+        Executes a custom command on the device
+        :param ResourceCommandContext context: The context object for the command with resource and reservation info
+        :param str command: The command to run. Note that commands that require a response are not supported.
+        :return: result
+        :rtype: str
+        """
+
+    def send_custom_config_command(self, context, command):
+        """
+        Executes a custom command on the device in configuration mode
+        :param ResourceCommandContext context: The context object for the command with resource and reservation info
+        :param str command: The command to run. Note that commands that require a response are not supported.
+        :return: result
+        :rtype: str
+        """
+
+    def shutdown(self, context):
+        """
+        Sends a graceful shutdown to the device
+        :param ResourceCommandContext context: The context object for the command with resource and reservation info
+        """
+        pass
+
+    def get_inventory(self, context):
+        """
+        Discovers the resource structure and attributes.
+        :param AutoLoadCommandContext context: the context the command runs on
+        :return Attribute and sub-resource information for the Shell resource
+        :rtype: AutoLoadDetails
+        """
+        '''
+        # Add sub resources details
+        sub_resources = [ AutoLoadResource(model ='Generic Chassis',name= 'Chassis 1', relative_address='1'),
+          AutoLoadResource(model='Generic Module',name= 'Module 1',relative_address= '1/1'),
+          AutoLoadResource(model='Generic Port',name= 'Port 1', relative_address='1/1/1'),
+          AutoLoadResource(model='Generic Port', name='Port 2', relative_address='1/1/2'),
+          AutoLoadResource(model='Generic Power Port', name='Power Port', relative_address='1/PP1')]
+
+
+        attributes = [ AutoLoadAttribute(relative_address='', attribute_name='Location', attribute_value='Santa Clara Lab'),
+                       AutoLoadAttribute('', 'Model', 'Catalyst 3850'),
+                       AutoLoadAttribute('', 'Vendor', 'Cisco'),
+                       AutoLoadAttribute('1', 'Serial Number', 'JAE053002JD'),
+                       AutoLoadAttribute('1', 'Model', 'WS-X4232-GB-RJ'),
+                       AutoLoadAttribute('1/1', 'Model', 'WS-X4233-GB-EJ'),
+                       AutoLoadAttribute('1/1', 'Serial Number', 'RVE056702UD'),
+                       AutoLoadAttribute('1/1/1', 'MAC Address', 'fe80::e10c:f055:f7f1:bb7t16'),
+                       AutoLoadAttribute('1/1/1', 'IPv4 Address', '192.168.10.7'),
+                       AutoLoadAttribute('1/1/2', 'MAC Address', 'te67::e40c:g755:f55y:gh7w36'),
+                       AutoLoadAttribute('1/1/2', 'IPv4 Address', '192.168.10.9'),
+                       AutoLoadAttribute('1/PP1', 'Model', 'WS-X4232-GB-RJ'),
+                       AutoLoadAttribute('1/PP1', 'Port Description', 'Power'),
+                       AutoLoadAttribute('1/PP1', 'Serial Number', 'RVE056702UD')]
+
+        return AutoLoadDetails(sub_resources,attributes)
+        '''
+        pass
+
+    # The ApplyConnectivityChanges function is intended to be used for using switches as connectivity providers
+    # for other devices. If the Switch shell is intended to be used a DUT only there is no need to implement it
+    '''
+    def ApplyConnectivityChanges(self, context, request):
+        """
+        Configures VLANs on multiple ports or port-channels
+        :param ResourceCommandContext context: The context object for the command with resource and reservation info
+        :param str request: A JSON object with the list of requested connectivity changes
+        :return: a json object with the list of connectivity changes which were carried out by the switch
+        :rtype: str
+        """
+
+        pass
+    '''
