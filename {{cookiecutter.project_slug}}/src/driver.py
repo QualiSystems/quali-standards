@@ -1,5 +1,6 @@
 from cloudshell.shell.core.resource_driver_interface import ResourceDriverInterface
-from cloudshell.shell.core.driver_context import InitCommandContext, ResourceCommandContext
+from cloudshell.shell.core.driver_context import InitCommandContext, ResourceCommandContext, AutoLoadResource, \
+    AutoLoadAttribute, AutoLoadDetails
 
 
 class {{cookiecutter.driver_name}} (ResourceDriverInterface):
@@ -94,45 +95,43 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         :return Attribute and sub-resource information for the Shell resource
         :rtype: AutoLoadDetails
         """
-        '''
-        # Add sub resources details
-        sub_resources = [ AutoLoadResource(model ='Generic Chassis',name= 'Chassis 1', relative_address='1'),
-          AutoLoadResource(model='Generic Module',name= 'Module 1',relative_address= '1/1'),
-          AutoLoadResource(model='Generic Port',name= 'Port 1', relative_address='1/1/1'),
-          AutoLoadResource(model='Generic Port', name='Port 2', relative_address='1/1/2'),
-          AutoLoadResource(model='Generic Power Port', name='Power Port', relative_address='1/PP1')]
-
-
-        attributes = [ AutoLoadAttribute(relative_address='', attribute_name='Location', attribute_value='Santa Clara Lab'),
-                       AutoLoadAttribute('', 'Model', 'Catalyst 3850'),
-                       AutoLoadAttribute('', 'Vendor', 'Cisco'),
-                       AutoLoadAttribute('1', 'Serial Number', 'JAE053002JD'),
-                       AutoLoadAttribute('1', 'Model', 'WS-X4232-GB-RJ'),
-                       AutoLoadAttribute('1/1', 'Model', 'WS-X4233-GB-EJ'),
-                       AutoLoadAttribute('1/1', 'Serial Number', 'RVE056702UD'),
-                       AutoLoadAttribute('1/1/1', 'MAC Address', 'fe80::e10c:f055:f7f1:bb7t16'),
-                       AutoLoadAttribute('1/1/1', 'IPv4 Address', '192.168.10.7'),
-                       AutoLoadAttribute('1/1/2', 'MAC Address', 'te67::e40c:g755:f55y:gh7w36'),
-                       AutoLoadAttribute('1/1/2', 'IPv4 Address', '192.168.10.9'),
-                       AutoLoadAttribute('1/PP1', 'Model', 'WS-X4232-GB-RJ'),
-                       AutoLoadAttribute('1/PP1', 'Port Description', 'Power'),
-                       AutoLoadAttribute('1/PP1', 'Serial Number', 'RVE056702UD')]
-
-        return AutoLoadDetails(sub_resources,attributes)
-        '''
+        # # Add sub resources details
+        # sub_resources = [ AutoLoadResource(model ='Generic Chassis',name= 'Chassis 1', relative_address='1'),
+        # AutoLoadResource(model='Generic Module',name= 'Module 1',relative_address= '1/1'),
+        # AutoLoadResource(model='Generic Port',name= 'Port 1', relative_address='1/1/1'),
+        # AutoLoadResource(model='Generic Port', name='Port 2', relative_address='1/1/2'),
+        # AutoLoadResource(model='Generic Power Port', name='Power Port', relative_address='1/PP1')]
+        #
+        #
+        # attributes = [ AutoLoadAttribute(relative_address='', attribute_name='Location', attribute_value='Santa Clara Lab'),
+        #                AutoLoadAttribute('', 'Model', 'Catalyst 3850'),
+        #                AutoLoadAttribute('', 'Vendor', 'Cisco'),
+        #                AutoLoadAttribute('1', 'Serial Number', 'JAE053002JD'),
+        #                AutoLoadAttribute('1', 'Model', 'WS-X4232-GB-RJ'),
+        #                AutoLoadAttribute('1/1', 'Model', 'WS-X4233-GB-EJ'),
+        #                AutoLoadAttribute('1/1', 'Serial Number', 'RVE056702UD'),
+        #                AutoLoadAttribute('1/1/1', 'MAC Address', 'fe80::e10c:f055:f7f1:bb7t16'),
+        #                AutoLoadAttribute('1/1/1', 'IPv4 Address', '192.168.10.7'),
+        #                AutoLoadAttribute('1/1/2', 'MAC Address', 'te67::e40c:g755:f55y:gh7w36'),
+        #                AutoLoadAttribute('1/1/2', 'IPv4 Address', '192.168.10.9'),
+        #                AutoLoadAttribute('1/PP1', 'Model', 'WS-X4232-GB-RJ'),
+        #                AutoLoadAttribute('1/PP1', 'Port Description', 'Power'),
+        #                AutoLoadAttribute('1/PP1', 'Serial Number', 'RVE056702UD')]
+        #
+        # return AutoLoadDetails(sub_resources,attributes)
         pass
 
     # The ApplyConnectivityChanges function is intended to be used for using switches as connectivity providers
     # for other devices. If the Switch shell is intended to be used a DUT only there is no need to implement it
-    '''
-    def ApplyConnectivityChanges(self, context, request):
-        """
-        Configures VLANs on multiple ports or port-channels
-        :param ResourceCommandContext context: The context object for the command with resource and reservation info
-        :param str request: A JSON object with the list of requested connectivity changes
-        :return: a json object with the list of connectivity changes which were carried out by the switch
-        :rtype: str
-        """
 
-        pass
-    '''
+    # def ApplyConnectivityChanges(self, context, request):
+    #     """
+    #     Configures VLANs on multiple ports or port-channels
+    #     :param ResourceCommandContext context: The context object for the command with resource and reservation info
+    #     :param str request: A JSON object with the list of requested connectivity changes
+    #     :return: a json object with the list of connectivity changes which were carried out by the switch
+    #     :rtype: str
+    #     """
+    #
+    #     pass
+
