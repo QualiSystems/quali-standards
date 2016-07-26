@@ -25,23 +25,23 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         """
         pass
 
-    def restore(self, context, config_file, config_type, restore_method, vrf):
+    def restore(self, context, configfile, config_type, restore_method, vrf):
         """
         Restores a configuration file
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
-        :param str config_file: The path to the configuration file, including the configuration file name.
+        :param str configfile: The path to the configuration file, including the configuration file name.
         :param str config_type: Specify whether the file should update the startup or running config.
         :param str restore_method: Determines whether the restore should append or override the current configuration.
         :param str vrf: Optional. Virtual routing and Forwarding management name
         """
         pass
 
-    def save(self, context, config_folder, config_type, vrf):
+    def save(self, context, configfolder, config_type, vrf):
         """
         Creates a configuration file and saves it to the provided destination
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
         :param str config_type: Specify whether the file should update the startup or running config. Value can one
-        :param str config_folder: The path to the folder in which the configuration file will be saved.
+        :param str configfolder: The path to the folder in which the configuration file will be saved.
         :param str vrf: Optional. Virtual routing and Forwarding management name
         :return The configuration file name.
         :rtype: str

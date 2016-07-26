@@ -22,7 +22,7 @@
         </Command>
         <Command Name="save" DisplayName="Save" Tags="" Description="Creates a configuration file and saves it to the provided destination">
             <Parameters>
-                <Parameter Name="config_folder" Type="String" Mandatory = "True" DisplayName="Folder Path" DefaultValue=""
+                <Parameter Name="configfolder" Type="String" Mandatory = "True" DisplayName="Folder Path" DefaultValue=""
                            Description="The path in which the configuration file will be saved. The path should include the protocol type (for example “tftp://asdf”)"/>
                 <Parameter Name="config_type" Type="Lookup" AllowedValues="Startup,Running" Mandatory = "True"  DefaultValue="Running"
                            DisplayName="Configuration Type" Description="Specify whether the file should update the startup or running config. 'Startup' configuration is not supported on all switches."/>
@@ -32,7 +32,7 @@
         </Command>
         <Command Name="restore" DisplayName="Restore" Tags="" Description="Restores a configuration file">
             <Parameters>
-                <Parameter Name="config_file" Type="String" Mandatory = "True" DefaultValue="" DisplayName="Path"
+                <Parameter Name="configfile" Type="String" Mandatory = "True" DefaultValue="" DisplayName="Path"
                            Description="The path to the configuration file, including the configuration file name. The path should include the protocol type (for example “tftp://asdf”)."/>
                 <Parameter Name="config_type" Type="Lookup" AllowedValues="Startup,Running" Mandatory = "True"  DefaultValue="Running"
                            DisplayName="Configuration Type" Description="Specify whether the file should update the startup or running config. 'Startup' configuration is not supported on all switches."/>
