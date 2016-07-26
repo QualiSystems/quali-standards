@@ -26,30 +26,25 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         """
         pass
 
-    def restore(self, context, path, config_type, restore_method, vrf):
+    def restore(self, context, config_path, config_type, restore_method, vrf):
         """
         Restores a configuration file
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
-        :param str path: The path to the configuration file, including the configuration file name.
+        :param str config_path: The path to the configuration file, including the configuration file name.
         :param str config_type: Specify whether the file should update the startup or running config.
-         Value can one of the folowing 'Startup'|'Running'. Startup configuration is not supported on all
-         switches.
         :param str restore_method: Determines whether the restore should append or override the current configuration.
-         Can be one of two possible values 'Append'|'Override'
         :param str vrf: Optional. Virtual routing and Forwarding management name
         """
         pass
 
-    def save(self, context, folder_path, config_type, vrf=None):
+    def save(self, context, path_test, config_type, restore_method, vrf):
         """
         Creates a configuration file and saves it to the provided destination
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
         :param str config_type: Specify whether the file should update the startup or running config. Value can one
-            of the folowing 'Startup'|'Running'. Startup configuration is not supported on all switches.
-        :param str folder_path: The path to the folder in which the configuration file will be saved. If empty value
-            should be taken from the resource 'Backup Location' attribute.
+        :param str folder_path: The path to the folder in which the configuration file will be saved.
         :param str vrf: Optional. Virtual routing and Forwarding management name
-        :return The configuration file name. Should follow the naming convention of [ResourceName]-[ConfigurationType]-[DDMMYY]-[HHMMSS]
+        :return The configuration file name.
         :rtype: str
         """
         pass
@@ -58,7 +53,7 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         """
         Upload and updates firmware on the resource
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
-        :param str remote_host: path to tftp:// server where firmware file is stored
+        :param str remote_host: path to tftp server where firmware file is stored
         :param str file_path: firmware file name
         """
         pass
@@ -71,6 +66,7 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         :return: result
         :rtype: str
         """
+        pass
 
     def send_custom_config_command(self, context, command):
         """
@@ -80,6 +76,7 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         :return: result
         :rtype: str
         """
+        pass
 
     def shutdown(self, context):
         """
@@ -87,6 +84,21 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
         """
         pass
+
+    # The ApplyConnectivityChanges function is intended to be used for using switches as connectivity providers
+    # for other devices. If the Switch shell is intended to be used a DUT only there is no need to implement it
+
+    # def ApplyConnectivityChanges(self, context, request):
+    #     """
+    #     Configures VLANs on multiple ports or port-channels
+    #     :param ResourceCommandContext context: The context object for the command with resource and reservation info
+    #     :param str request: A JSON object with the list of requested connectivity changes
+    #     :return: a json object with the list of connectivity changes which were carried out by the switch
+    #     :rtype: str
+    #     """
+    #
+    #     pass
+
 
     def get_inventory(self, context):
         """
@@ -120,18 +132,3 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         #
         # return AutoLoadDetails(sub_resources,attributes)
         pass
-
-    # The ApplyConnectivityChanges function is intended to be used for using switches as connectivity providers
-    # for other devices. If the Switch shell is intended to be used a DUT only there is no need to implement it
-
-    # def ApplyConnectivityChanges(self, context, request):
-    #     """
-    #     Configures VLANs on multiple ports or port-channels
-    #     :param ResourceCommandContext context: The context object for the command with resource and reservation info
-    #     :param str request: A JSON object with the list of requested connectivity changes
-    #     :return: a json object with the list of connectivity changes which were carried out by the switch
-    #     :rtype: str
-    #     """
-    #
-    #     pass
-
