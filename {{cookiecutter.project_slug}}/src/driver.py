@@ -1,6 +1,5 @@
 from cloudshell.shell.core.resource_driver_interface import ResourceDriverInterface
-from cloudshell.shell.core.driver_context import InitCommandContext, ResourceCommandContext, AutoLoadResource, \
-    AutoLoadAttribute, AutoLoadDetails
+from cloudshell.shell.core.driver_context import InitCommandContext, ResourceCommandContext, AutoLoadResource,  AutoLoadAttribute, AutoLoadDetails
 
 
 class {{cookiecutter.driver_name}} (ResourceDriverInterface):
@@ -26,23 +25,23 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         """
         pass
 
-    def restore(self, context, config_path, config_type, restore_method, vrf):
+    def restore(self, context, file_location, config_type, restore_method, vrf):
         """
         Restores a configuration file
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
-        :param str config_path: The path to the configuration file, including the configuration file name.
+        :param str file_location: The path to the configuration file, including the configuration file name.
         :param str config_type: Specify whether the file should update the startup or running config.
         :param str restore_method: Determines whether the restore should append or override the current configuration.
         :param str vrf: Optional. Virtual routing and Forwarding management name
         """
         pass
 
-    def save(self, context, path_test, config_type, restore_method, vrf):
+    def save(self, context, folder_location, config_type, vrf):
         """
         Creates a configuration file and saves it to the provided destination
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
         :param str config_type: Specify whether the file should update the startup or running config. Value can one
-        :param str folder_path: The path to the folder in which the configuration file will be saved.
+        :param str folder_location: The path to the folder in which the configuration file will be saved.
         :param str vrf: Optional. Virtual routing and Forwarding management name
         :return The configuration file name.
         :rtype: str
