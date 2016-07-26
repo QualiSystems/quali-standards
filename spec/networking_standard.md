@@ -170,7 +170,7 @@ CLI Connection Type | Attribute of type Lookup. Possible values – Auto, Consol
 Power Management | Attribute of type Boolean. Possible values – True, False | Yes
 Backup Location | | Yes
 Sessions Concurrency Limit | Attributes of type Numeric. Default is 1 (no concurrency) | Yes
-
+VRF Management Name | | Yes
 
 
 #####  Generic Chassis
