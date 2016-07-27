@@ -25,7 +25,7 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         """
         pass
 
-    def restore(self, context, configfile, config_type, restore_method, vrf):
+    def restore(self, context, config, config_type, restore_method, vrf):
         """
         Restores a configuration file
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
