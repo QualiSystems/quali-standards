@@ -1,5 +1,9 @@
+import datetime
+from cloudshell.shell.core.interfaces.save_restore import OrchestrationSaveResult, OrchestrationSavedArtifact, \
+    OrchestrationSavedArtifactInfo, OrchestrationRestoreRules
 from cloudshell.shell.core.resource_driver_interface import ResourceDriverInterface
-from cloudshell.shell.core.driver_context import InitCommandContext, ResourceCommandContext, AutoLoadResource,  AutoLoadAttribute, AutoLoadDetails
+from cloudshell.shell.core.driver_context import InitCommandContext, ResourceCommandContext, AutoLoadResource, \
+    AutoLoadAttribute, AutoLoadDetails
 
 
 class {{cookiecutter.driver_name}} (ResourceDriverInterface):
@@ -25,6 +29,7 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         """
         pass
 
+    # <editor-fold desc="Networking Standard Commands">
     def restore(self, context, config, config_type, restore_method, vrf):
         """
         Restores a configuration file
@@ -62,7 +67,7 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         Executes a custom command on the device
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
         :param str command: The command to run. Note that commands that require a response are not supported.
-        :return: result
+        :return: the command result text
         :rtype: str
         """
         pass
@@ -72,7 +77,7 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         Executes a custom command on the device in configuration mode
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
         :param str command: The command to run. Note that commands that require a response are not supported.
-        :return: result
+        :return: the command result text
         :rtype: str
         """
         pass
@@ -83,6 +88,42 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
         """
         pass
+    # </editor-fold>
+
+    # <editor-fold desc="Save and Restore Standard">
+    def orchestration_save(self, context, mode, custom_params=None):
+        """
+        Saves the Shell state and returns a description of the saved artifacts and information
+        :param ResourceCommandContext context: resource context of the vCenterShell
+        :param str mode: Snapshot save mode, default shallow. Currently not it use
+        :param str custom_params: Set of custom parameter to be supported in the future
+        :return: SavedResults serialized as JSON
+        :rtype: str
+        """
+        pass
+
+    def orchestration_restore(self, context, saved_details):
+        """
+        Restores the Shell to a previously saved state
+        :param ResourceCommandContext context: resource context of the vCenterShell
+        :param str saved_details: A JSON string representing the state to restore including saved artifacts and info
+        :return: Nothing
+        """
+
+        # orchestration_saved_artifact = OrchestrationSavedArtifact('REPLACE_WITH_TYPE', 'REPLACE_WITH_IDENTIFIER')
+        # created_date = datetime.datetime.utcnow()
+        #
+        # saved_artifacts_info = OrchestrationSavedArtifactInfo(
+        #     resource_name="some_resource",
+        #     created_date=created_date,
+        #     restore_rules=OrchestrationRestoreRules(requires_same_resource=True),
+        #     saved_artifact=orchestration_saved_artifact)
+        #
+        # orchestration_save_result = OrchestrationSaveResult(saved_artifacts_info)
+        # json_string = jsonpickle.encode(orchestration_save_result, unpicklable=False)
+        pass
+
+    # </editor-fold>
 
     # The ApplyConnectivityChanges function is intended to be used for using switches as connectivity providers
     # for other devices. If the Switch shell is intended to be used a DUT only there is no need to implement it
@@ -97,7 +138,6 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
     #     """
     #
     #     pass
-
 
     def get_inventory(self, context):
         """
