@@ -25,7 +25,7 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         pass
 
     # <editor-fold desc="Networking Standard Commands">
-    def restore(self, context, cancellation_context, path, restore_method, configuration_type, vrf_management_name):
+    def restore(self, context, cancellation_context, path, restore_method, configuration_type, vrf_management_name=None):
         """
         Restores a configuration file
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
@@ -37,7 +37,7 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         """
         pass
 
-    def save(self, context, cancellation_context, configuration_type, folder_path, vrf_management_name):
+    def save(self, context, cancellation_context, configuration_type, folder_path, vrf_management_name=None):
         """
         Creates a configuration file and saves it to the provided destination
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
