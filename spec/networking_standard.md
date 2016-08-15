@@ -283,8 +283,14 @@ Loads a firmware onto the device
    - Inputs:
      - File Path
      - Remote Host
+   - The command should update the 'Version' attribute on the resource after a succesful loading of a new firmware
 
+### Get Firmware
+Queries the device for the firmware version that is currently installed
+   - The command should update the 'Version' attribute on the resource after a succesful loading of a new firmware
+   Output: a JSON with the command’s response, should include the firmware version number
 
+   
 ### Add_VLAN
 Configures VLAN on a port / port-channel
    - Inputs:
