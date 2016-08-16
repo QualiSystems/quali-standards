@@ -1,6 +1,6 @@
 # Networking Shell Standard
 
-#### Version 3.2.0
+#### Version 4.0.0
 
 
 ## Introduction
@@ -13,6 +13,7 @@ The standard defines the Shell’s data model, commands and a set of guidelines 
 
 Version | Date | Notes
 --- | --- | ---
+4.0.0 | 2016-08-16 | 1) Added a new attribute named “CLI TCP Port” on the root model. That attribute will be filled in by the administrator (optional). 2)  The "Configuration Type" input in the Save and Restore command is now not mandatory, the default value if kept empty is Running. 3) Descriptions were added to the attributes, commands and command inputs (only commands visible in the UI). 4) A “Health check” command was added. This command performs checks on the device that validates that the Shell can work. In a networking device this checks usually include connectivity check for the protocols used by the Shell. 5) Removed the attribute “Protocol Type” from the standard. 6) Added the attributes “Enable SNMP” and “Disable SNMP” on the root model. Those attribute will allow automatic configuration of SNMP before and after the execution of the Autoload command which requires SNMP. 7) The value of the attribute “Bandwidth” is now in MB instead of Bytes. 8) Added orchestration_save and orchestration_restore commands according to the Save and Restore Orchestration Standard. Those commands wrap the Shell’s Save and Restore commands with a standard interface to be used by the Sandbox orchestration. 9) The command name and command input names are now defined in the standard. Prior to this standard version only the command alias and command input aliases were defined. 10) The inputs of the load_firmware command were changed and alligned with the inputs of the restore command. 11) The expected syntax of the path and folder_path inputs of the restore, load_firmware and save commands in case of FTP protocol was clarified. 12) The Add_VLAN and Remove_VLAN commands were removed from the standard. They are replaced by the ApplyConnectivityChanges command. **The 9th and 10th items aren't backwards compatible and will require modification of any existing automation which calls the Shell’s commands. However, upcoming shells will still have the old commands available as hidden command so the shells themselves will remain backwards compatible until their next major verion.**
 3.2.0 | 2016-07-14 | Added a new attribute named "VRF Management Name" on the root model. The attribute will be filled in by the administrator (optional). Save and Restore commands will use the value in this attribute in case no such input was passed to the command.
 3.1.0 | 2016-06-23 | Added a new data model for Wireless Controller (in addition to Switch and Router).
 3.0.0 | 2016-06-09 | The name and address of the Power Port has changed from "PP[ID]" to "PP[ContainerID][ID]" in order to support devices with power ports that have the same ID but are under different containers. **This change isn't backwards compatible.**
@@ -145,99 +146,96 @@ Note: The [ID] for each sub-resource is taken from the device itself (correspond
 
 ##### [Vendor] [OS] Switch or [Vendor] [OS] Router or [Vendor] [OS] Wireless Controller
 
-Attribute Name | Details | User input?
---- | --- | ---
-User | User with administrative privileges | Yes
-Password | Attribute of type Password | Yes
-Enable Password | Attribute of type Password | Yes
-System Name | | No
-Contact Name | | No
-OS Version | | No
-Vendor | | No
-Location | | No
-Model | | No
-SNMP Read Community | | Yes
-SNMP Write Community | | Yes
-SNMP V3 User | | Yes
-SNMP V3 Password | | Yes
-SNMP V3 Private Key | | Yes
-SNMP Version | Possible values – v1, v2c, v3 | Yes
-Console Server IP Address | | Yes
-Console User | | Yes
-Console Port | Attributes of type Numeric | Yes
-Console Password | Attribute of type Password | Yes
-CLI Connection Type | Attribute of type Lookup. Possible values – Auto, Console, SSH, Telnet, TCP | Yes
-Power Management | Attribute of type Boolean. Possible values – True, False | Yes
-Backup Location | | Yes
-Sessions Concurrency Limit | Attributes of type Numeric. Default is 1 (no concurrency) | Yes
-VRF Management Name | | Yes
-
+Attribute Name | Data Type | User input? | Description
+--- | --- | --- | ---
+User | String | Yes |
+Password | Password | Yes |
+Enable Password | Password | Yes | The enable password is required by some CLI protocols such as Telnet and is required according to the device configuration.
+System Name | String | No | A unique identifier for the device, if exists in the device terminal/os.
+Contact Name | String | No | The name of a contact registered in the device.
+OS Version | String | No | Version of the Operating System.
+Vendor | String | No | The name of the device manufacture.
+Location | String | No | The device physical location identifier. For example Lab1/Floor2/Row5/Slot4.
+Model | String | No | The device model. This information is typically used for abstract resource filtering.
+SNMP Read Community | String | Yes | The SNMP Read-Only Community String is like a password. It is sent along with each SNMP Get-Request and allows (or denies) access to device.
+SNMP Write Community | String | Yes | The SNMP Write Community String is like a password. It is sent along with each SNMP Set-Request and allows (or denies) chaning MIBs values.
+SNMP V3 User | String | Yes | Relevant only in case SNMP V3 is in use.
+SNMP V3 Password | String | Yes | Relevant only in case SNMP V3 is in use.
+SNMP V3 Private Key | String | Yes | Relevant only in case SNMP V3 is in use.
+SNMP Version | String | Yes | The version of SNMP to use. Possible values are v1, v2c and v3.
+Console Server IP Address | String | Yes | The IP address of the console server, in IPv4 format.
+Console User | String | Yes |
+Console Port | Numeric | Yes | The port on the console server, usually TCP port, which the device is associated with.
+Console Password | Password | Yes |
+CLI Connection Type | Lookup | Yes | The CLI connection type that will be used by the driver. Possible values are Auto, Console, SSH, Telnet and TCP. If Auto is selected the driver will choose the available connection type automatically. Default value is Auto.
+Power Management | Boolean | Yes | Used by the power management orchestration, if enabled, to determine whether to automatically manage the device power status. Enabled by default.
+Backup Location | String | Yes | The location in which configuration files will be saved in case no backup location input is passed to the Save command.
+Sessions Concurrency Limit | Numeric | Yes | The maximum number of concurrent sessions that the driver will open to the device. Default is 1 (no concurrency).
+VRF Management Name | String | Yes | The default VRF Management to use if configured in the network and no such input was passed to the Save or Restore command.
+CLI TCP Port | Numeric | Yes | TCP Port to user for CLI connection. If kept empty a default CLI port will be used based on the chosen protocol, for example Telnet will use port 23.
+Enable SNMP | Boolean | Yes | If set to True and SNMP isn’t enabled yet in the device the Shell will automatically enable SNMP in the device when Autoload command is called. SNMP must be enabled on the device for the Autoload command to run successfully. True by default.
+Disable SNMP | Boolean | Yes | If set to True SNMP will be disabled automatically by the Shell after the Autoload command execution is completed. False by default.
 
 #####  Generic Chassis
 
-Attribute Name | Details | User input?
---- | --- | ---
-Model | | No
-Serial Number | | No
+Attribute Name | Data Type | User input? | Description
+--- | --- | --- | ---
+Model | String | No | The device model. This information is typically used for abstract resource filtering.
+Serial Number | String | No |
 
 
 #####  Generic Module
 
-Attribute Name | Details | User input?
---- | --- | ---
-Model | | No
-Version | | No
-Serial Number | | No
+Attribute Name | Data Type | User input? | Description
+--- | --- | --- | ---
+Model | String | No | The device model. This information is typically used for abstract resource filtering.
+Version | String | No | The firmware version of the resource.
+Serial Number | String | No |
 
 
 ##### Generic Sub Module
 
-Attribute Name | Details | User input?
---- | --- | ---
-Model | | No
-Version | | No
-Serial Number | | No
+Attribute Name | Data Type | User input? | Description
+--- | --- | --- | ---
+Model | String | No | The device model. This information is typically used for abstract resource filtering.
+Version | String | No | The firmware version of the resource.
+Serial Number | String | No |
 
 
 ##### Generic Port
 
-Attribute Name | Details | User input?
---- | --- | ---
-MAC Address | | No
-L2 Protocol Type | Such as POS, Serial | No
-IPv4 Address | | No
-IPv6 Address | | No
-Port Description | | No
-Bandwidth | Attributes of type Numeric | No
-MTU | Attributes of type Numeric | No
-Duplex | Attributes of type Lookup. Half or Full | No
-Adjacent | System or Port | No
-Protocol Type | Default values is Transparent (=”0”) | No
-Auto Negotiation | True or False | No
+Attribute Name | Data Type | User input? | Description
+--- | --- | --- | ---
+MAC Address | String | No |
+L2 Protocol Type | String | No | The L2 protocol type configured on the interface. For example POS, Serial.
+IPv4 Address | String | No |
+IPv6 Address | String | No |
+Port Description | String | No | The description of the port as configured in the device.
+Bandwidth | Numeric | No | The current interface bandwidth, in MB.
+MTU | Numeric | No | The current MTU configured on the interface.
+Duplex | Lookup | No | The current duplex configuration on the interface. Possible values are Half or Full.
+Adjacent | String | No | The adjacent device (system name) and port, based on LLDP or CDP protocol.
+Auto Negotiation | Boolean | No | The current auto negotiation configuration on the interface.
 
 
 #####  Generic Port Channel
 
-Attribute Name | Details | User input?
---- | --- | ---
-Associated Ports | value in the form “[portResourceName],…”, for example “GE0-0-0-1,GE0-0-0-2” | No
-IPv4 Address | | No
-IPv6 Address | | No
-Port Description | | No
-Protocol Type | Default values is Transparent (=”0”) | No
-
-
+Attribute Name | Data Type | User input? | Description
+--- | --- | --- | ---
+Associated Ports | String | No | Ports associated with this port channel. The value is in the format “[portResourceName],…”, for example “GE0-0-0-1,GE0-0-0-2”
+IPv4 Address | String | No |
+IPv6 Address | String | No |
+Port Description | String | No | The description of the port as configured in the device.
 
 
 #####  Generic Power Port
 
-Attribute Name | Details | User input?
---- | --- | ---
-Model | | No
-Serial Number || No
-Version | | No
-Port Description | | No
-
+Attribute Name | Data Type | User input? | Description
+--- | --- | --- | ---
+Model | String | No | The device model. This information is typically used for abstract resource filtering.
+Serial Number | String | No |
+Version | String | No | The firmware version of the resource.
+Port Description | String | No | The description of the port as configured in the device.
 
 
 ## Commands
@@ -251,93 +249,287 @@ Note that the connectivity ApplyConnectivityChanges command behaves differently 
 
 
 ### Autoload
-Queries the devices and loads the structure and attribute values into CloudShell.
-  - SNMP Based
+```python
+def get_inventory (self, context)
+```
 
+###### Description
+This function queries the device, discovers it's specification and structure and autoload it into CloudShell. When new resource is created Cloudshell asks the user to specify some user input (i.e user name & psasword) and then it calls the get_inventory function.
 
+###### Notes
+The standard recommended way of communicating and discovering the device is via SNMP protocol and therefore this command requires SNMP to be configured in the device. In case SNMP isn’t configured in the device and the attribute “Enable SNMP” on the root model is set to True the Autoload command will configure SNMP in the device. If the attribute “Disable SNMP” on the root model is set to True the Autoload command will disable the SNMP in the device once the discovery of the device is completed. In case SNMP isn't configured and "Enable SNMP" on the root model is set to false a relevant error message will be displayed.
+
+###### Display Name
+System command, it has no display name
+
+###### Parameters
+Input / Output | Parameter | Alias | Data Type | Required | Description
+--- | --- | --- | --- | --- | ---
+Input | context | - | object | system parameter | object of type AutoLoadCommandContext which includes API connectivity details and the details of the resource including attributes that the user entered during the resource creation. | - | -
+Output | AutoLoadDetails | - | object | Yes | object of type AutoLoadDetails with the discovered resource structure and attributes. | - | -
 
 ### Save
-Creates a configuration file.
-  - Inputs
-      - Configuration Type – optional, if empty the default value will be taken. Possible values – StartUp or Running Default value – Running
-      - Folder Path – the path in which the configuration file will be saved. Won’t include the name of the file but only the folder. This input is optional and in case this input is empty the value will be taken from the “Backup Location” attribute on the root resource. The path should include the protocol type (for example “tftp://asdf”)
-      - VRF Management Name - optional, no default. VRF (Virtual routing and Forwarding) is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. In case no value is passed in this input the command will use the value in the "VRF Management Name" attribute on the root model (which can be empty).
+```python
+def save (configuration_type, folder_path, vrf_management_name)
+```
 
-  - Output: <FullFileName>
-   - The configuration file name should be “[ResourceName]-[ConfigurationType]-[DDMMYY]-[HHMMSS]”
+###### Description
+Create and save a configuration file
 
+###### Display Name
+Save
+
+###### Parameters
+Input / Output | Parameter | Alias | Data Type | Required | Description
+--- | --- | --- | --- | --- | ---
+Input | configuration_type | Configuration Type | string | No | The type of configuration that will be saved. Possible values are StartUp and Running. If kept empty the default configuration type that will be used is Running.
+Input | folder_path | Folder Path | string | No | The path in which the configuration file will be saved. Won't include the name of the file but only the folder. This input is optional and in case this input is empty the value will be taken from the "Backup Location" attribute on the root resource. The path should include the protocol type, for TFTP use "tftp://asdf", for FTP use "ftp://username:password@server_address/folder1/file1.bin".
+Input | vrf_management_name | VRF Management Name | string | No | Virtual Routing and Forwarding is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. If kept empty the value in the "VRF Management Name" attribute on the root model will be used.
+Output | | | string | Yes | <FullFileName>. The configuration file name should be “[ResourceName]-[ConfigurationType]-[DDMMYY]-[HHMMSS]”.
 
 ### Restore
-Restores a configuration file.
-   - Inputs
-       - Path – the path to the configuration file, including the configuration file name. The path should include the protocol type (for example “tftp://asdf”). This input is mandatory.
-       - Restore Method – optional, if empty the default value will be taken. Possible values – Append or Override Default value – Override
-       - Configuration Type - mandatory, no default. Possible values - StartUp or Running
-       - VRF Management Name - optional, no default. VRF (Virtual routing and Forwarding) is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. In case no value is passed in this input the command will use the value in the "VRF Management Name" attribute on the root model (which can be empty).
+```python
+def restore (path, restore_method, configuration_type, vrf_management_name)
+```
+
+###### Description
+Restore a configuration file
+
+###### Display Name
+Restore
+
+###### Parameters
+Input / Output | Parameter | Alias | Data Type | Required | Description
+--- | --- | --- | --- | --- | ---
+Input | path | Path | string | Yes | The path to the configuration file, including the configuration file name. The path should include the protocol type, for TFTP use "tftp://asdf", for FTP use "ftp://username:password@server_address/folder1/file1.bin".
+Input | restore_method | Restore Method | string | No | The restore method to use when restoring the configuration file. Possible Values are Append and Override. If kept empty the restore method will be Override.
+Input | configuration_type | Configuration Type | string | No | The configuration type to restore. Possible values are StartUp and Running. If kept empty the configuration type that will be restored is Running.
+Input | vrf_management_name | VRF Management Name | string | No | Virtual Routing and Forwarding is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. If kept empty the value in the "VRF Management Name" attribute on the root model will be used.
 
 
 ### Load Firmware
+```python
+def load_firmware (path, vrf_management_name)
+```
+
+###### Description
 Loads a firmware onto the device
-   - CLI based
-   - Applies to the whole device, also in case of multi-chassis device
-   - Inputs:
-     - File Path
-     - Remote Host
 
+###### Notes
+This command is CLI based and applies to the whole device, also in case of multi-chassis device.
 
-### Add_VLAN
-Configures VLAN on a port / port-channel
-   - Inputs:
-     - VLAN_Ranges - string input, Possible values – support a specific VLAN ID or VLAN range (in the format of “a-b,c”)
-     - VLAN_Mode, Possible values – access or trunk
-     - port – the full address of the port
-     - Additional_Info
-   - This command should be tagged as “connected command”
-   - This command should be hidden from the UI
-     - If Additional_Info = QNQ --> configuration mode is Q-in-Q.
-If Additional_Info = QNQ,<ID/Range> --> configuration mode is Selective Q-in-Q according to the ID/Range (the syntax for the ID/Range is "a,b-c", for example "100-200,340,1000-2000" or just "200")
-If Additional_Info = empty --> configures VLAN in regular mode.
+###### Display Name
+Load Firmware
 
- Note - the "Add_VLAN" command won't exist in Shells which support CloudShell version 7.0 and above. It is replaced by the ApplyConnectivityChanges Command.
+###### Parameters
+Input / Output | Parameter | Alias | Data Type | Required | Description
+--- | --- | --- | --- | --- | ---
+Input | file_path | File Path | string | Yes | The full path of the firmware file to load on the device.
+Input | remote_host | Remote Host | string | Yes | TBD
 
-
-### Remove_VLAN
-Clears VLAN configuration from a port / port-channel
- - Inputs:
-   - VLAN_Ranges - string input - Possible values – support a specific VLAN ID or VLAN range (in the format of “a-b,c”)
-   - VLAN_Mode - Possible values – access or trunk
-   - port – the full address of the port
-   - Additional_Info
- - This command should be tagged as “connected command”
- - This command should be hidden from the UI
-
-Note - the "Remove_VLAN" command won't exist in Shells which support CloudShell version 7.0 and above. It is replaced by the ApplyConnectivityChanges Command.
-
+Input | path | Path | string | Yes | The path to the firmware file, including the firmware file name. The path should include the protocol type, for TFTP use "tftp://asdf", for FTP use "ftp://username:password@server_address/folder1/file1.bin".
+Input | vrf_management_name | VRF Management Name | string | No | Virtual Routing and Forwarding is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. If kept empty the value in the "VRF Management Name" attribute on the root model will be used.
 
 ### Run Custom Command
-Executes any custom command entered by the user on the device
-  - Inputs:
-    - Custom command – the command itself. Note that commands that require a response aren’t supported
+```python
+def run_custom_command (custom_command)
+```
 
+###### Description
+Executes any custom command entered in the input on the device.
+
+###### Display Name
+Run Custom Command
+
+###### Parameters
+Input / Output | Parameter | Alias | Data Type | Required | Description
+--- | --- | --- | --- | --- | ---
+Input | custom_command | Custom Command | string | Yes | The command to execute. Note that commands that require a reponse aren't supported.
 
 ### Run Custom Config Command
-Executes any custom config command entered by the user on the device.
-  - Inputs:
-    - Custom command – the command itself. Note that commands that require a response aren’t supported
-    - This command will be hidden from the UI and accessible only via API.
+```python
+def run_custom_config_command (custom_command)
+```
 
+###### Description
+Executes any custom config command entered in the input on the device.
+
+###### Notes
+This command should be hidden from the UI.
+
+###### Display Name
+Run Custom Config Command
+
+###### Parameters
+Input / Output | Parameter | Alias | Data Type | Required | Description
+--- | --- | --- | --- | --- | ---
+Input | custom_command | Custom Command | string | Yes | The command to execute. Note that commands that require a reponse aren't supported.
 
 ### Shutdown
-Sends a graceful shutdown to the device
-  - Inputs:
-    - Note that not all devices support a shutdown command. In such cases the command just wouldn’t be implemented
+```python
+def shutdown()
+```
+
+###### Description
+Sends a graceful shutdown to the device.
+
+###### Notes
+Not all devices support a shutdown command. In such cases the command just won’t be implemented.
+
+###### Display Name
+Shutdown
+
+###### Parameters
+No input parameters.
 
 ### ApplyConnectivityChanges
+```python
+def ApplyConnectivityChanges(request)
+```
+
+###### Description
 Configures VLANs on multiple ports or port-channels
-  - Inputs:
-    - Request – a JSON with bulk “add_vlan” or “remove_vlan” request. The request includes the list of ports and VLANs that should be configured or cleared on those ports. See separate article with the JSON schema and an example.
-  - Output: a JSON with the command’s response, should include success/fail per each connection request.
-  - This command is compatible with the connectivity in CloudShell 7.0 version and above.
 
+###### Notes
+Compatible with the connectivity in CloudShell 7.0 version and above. This command will be available in the Shell only when applicable in the device.
+The standard doesn’t support different VLAN request to the same Switch/Router/Wireless-Controller port at the same time. For example, connecting the same port to multiple VLAN services each with a different VLAN ID/range. When configuring VLAN ID/range on a port the assumption is that there is no other VLAN configured on it. 
 
-Notes: (1) The ApplyConnectivityChanges command will be available in the Shell only when applicable in the device; (2) The standard doesn’t support different VLAN request to the same Switch/Router/Wireless-Controller port at the same time. For example connecting the same port to multiple VLAN services each with a different VLAN ID/range. When configuring VLAN ID/range on a port the assumption is that there is no other VLAN configured on it.         
+###### Display Name
+ApplyConnectivityChanges
+
+###### Parameters
+Input / Output | Parameter | Alias | Data Type | Required | Description
+--- | --- | --- | --- | --- | ---
+Input | request | request | string | Yes | a JSON with bulk “add_vlan” or “remove_vlan” request. The request includes the list of ports and VLANs that should be configured or cleared on those ports. See separate article with the JSON schema and an example.
+Output | | | string | Yes | a JSON with the command’s response, should include success/fail per each connection request.
+
+### Health Check
+```python
+def health_check()
+```
+
+###### Description
+Performs checks on the device that validates that the Shell can work. In a networking device this checks usually include connectivity check for the protocols used by the Shell. The healtcheck result will be visible in the resource live status and command output.
+
+###### Notes
+In case the performed checks fail the live status of the resource should be "Error" and both the live status description and the output of the command should be "Health check on resource [root_resource_name] failed".
+In case all performed checks passed the live status of the resource should be "Online" and both the live status description and the output of the command should be "Health check on resource [root_resource_name] passed".
+CLI check is the check that is currently supported by the networking devices.
+
+###### Display Name
+Health Check
+
+###### Parameters
+Input / Output | Parameter | Alias | Data Type | Required | Description
+--- | --- | --- | --- | --- | ---
+Output | | | string | Yes | The health check result
+
+### orchestration_save
+```python
+def orchestration_save(mode="shallow", custom_params = null)
+```
+
+###### Notes
+Based on the Orchestration Save and Restore Standard - https://github.com/QualiSystems/sandbox_orchestration_standard/blob/master/save%20%26%20restore/save%20%26%20restore%20standard.md
+The command wraps the Save command with a standard interface that will be used by the Sandbox orchestration. This command will call the Save command which will create a configuration file.
+The command should be hidden from the UI.
+In case there is no folder_path input and the attribute "Backup Location" on the root model is empty the command should throw an error.
+
+###### Display Name
+orchestration_save
+
+###### Parameters
+Input / Output | Parameter | Alias | Data Type | Required | Description
+--- | --- | --- | --- | --- | ---
+Input | mode | mode | string | Yes | The save mode. Possible values are "Shallow" and "Deep". In a networking device both modes will have the same behavior of saving a configuration file.
+Input | custom_params | custom_params | string | Yes | A JSON data structure with optional parameters. If no parameters are passed the defaults defined on the root resource and in the Save command will be used.
+Output | saved_artifact_info | saved_artifact_info | string | Yes | A composite data structure that represents the details of the snapshot.
+
+An example for the "custom_params" input:
+
+```json
+{
+  "custom_params": {
+    "configuration_type" : "StartUp"
+    "folder_path" : "tftp://10.0.0.1/folder1"
+    "vrf_management_name": "network-1"
+  }
+}
+```
+
+An example for the "saved_artifact_info" output:
+```json
+{
+  "saved_artifact_info": {
+    "resource_name": "CiscoNXOSSwitch1",
+    "resource_id" : "5F2EAA6C-E3FD-4DF0-8E2D-F05C81D61631",
+    "created_date": "3577-04-27T00:17:48.819Z",
+    "restore_rules": {
+      "requires_same_resource": true
+    },    
+    "saved_artifact" :{
+      "artifact_type": "tftp",
+      "identifier": "/folder1/CiscoNXOSSwitch1-Running-080816-13:20:53",
+      "server": "server1"
+    }
+  }
+}
+```
+
+The artifact types supported by Networking orchestration_save command are "ftp", "tftp" and "filesystem".
+The "requires_same_resource" restore rule for Networking devices is always True.
+
+### orchestration_restore
+```python
+def orchestration_restore(saved_artifact_info, custom_params = null)
+```
+
+###### Notes
+Based on the Orchestration Save and Restore Standard - https://github.com/QualiSystems/sandbox_orchestration_standard/blob/master/save%20%26%20restore/save%20%26%20restore%20standard.md
+The command wraps the Restore command with a standard interface that will be used by the Sandbox orchestration. This command will call the Save command which will create a configuration file.
+The command should be hidden from the UI.
+In case the saved artifact type is FTP the FTP credentials are saved on the FTP resource, so the orchestration_restore command will access the FTP resource to get them and pass them to the Restore command.
+
+###### Display Name
+orchestration_restore
+
+###### Parameters
+Input / Output | Parameter | Alias | Data Type | Required | Description
+--- | --- | --- | --- | --- | ---
+Input | saved_artifact_info | saved_artifact_info | string | Yes | A composite data structure that represents the details of the snapshot. The value that will be passed as input must be the same as the exact value that the save function returned.
+Input | custom_params | custom_params | string | Yes | A JSON data structure with optional parameters. If no parameters are passed the defaults defined on the root resource and in the Restore command will be used.
+
+An example for the "custom_params" input:
+
+```json
+{
+  "custom_params": {
+    "path" : "tftp://folder1"
+    "restore_method" : "Append"
+    "configuration_type" : "StartUp"
+    "vrf_management_name": "network-1"
+  }
+}
+```
+
+An example for the "saved_artifact_info" input:
+```json
+{
+  "saved_artifact_info": {
+    "resource_name": "CiscoNXOSSwitch1",
+    "resource_id" : "5F2EAA6C-E3FD-4DF0-8E2D-F05C81D61631",
+    "created_date": "3577-04-27T00:17:48.819Z",
+    "restore_rules": {
+      "requires_same_resource": true
+    },    
+    "saved_artifact" :{
+      "artifact_type" : "ftp",
+      "ftp_resource" : "ftp_srv1", 
+      "identifier": "//folder1/CiscoNXOSSwitch1-Running-080816-13:20:53"
+    }
+  }
+}
+```
+
+The artifact types supported by Networking orchestration_restore command are "ftp", "tftp" and "filesystem".
+The "requires_same_resource" restore rule for Networking devices is always True.
