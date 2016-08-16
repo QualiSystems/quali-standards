@@ -324,9 +324,6 @@ Load Firmware
 ###### Parameters
 Input / Output | Parameter | Alias | Data Type | Required | Description
 --- | --- | --- | --- | --- | ---
-Input | file_path | File Path | string | Yes | The full path of the firmware file to load on the device.
-Input | remote_host | Remote Host | string | Yes | TBD
-
 Input | path | Path | string | Yes | The path to the firmware file, including the firmware file name. The path should include the protocol type, for TFTP use "tftp://asdf", for FTP use "ftp://username:password@server_address/folder1/file1.bin".
 Input | vrf_management_name | VRF Management Name | string | No | Virtual Routing and Forwarding is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. If kept empty the value in the "VRF Management Name" attribute on the root model will be used.
 
