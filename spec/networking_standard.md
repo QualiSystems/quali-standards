@@ -501,7 +501,7 @@ An example for the "custom_params" input:
 ```json
 {
   "custom_params": {
-    "path" : "tftp://folder1"
+    "path" : "tftp://10.0.0.1/folder1"
     "restore_method" : "Append"
     "configuration_type" : "StartUp"
     "vrf_management_name": "network-1"
@@ -522,7 +522,7 @@ An example for the "saved_artifact_info" input:
     "saved_artifact" :{
       "artifact_type" : "ftp",
       "ftp_resource" : "ftp_srv1", 
-      "identifier": "//folder1/CiscoNXOSSwitch1-Running-080816-13:20:53"
+      "identifier": "/folder1/CiscoNXOSSwitch1-Running-080816-13:20:53"
     }
   }
 }
