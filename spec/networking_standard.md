@@ -276,6 +276,9 @@ def save (configuration_type, folder_path, vrf_management_name)
 ###### Description
 Create and save a configuration file
 
+###### Notes
+This command isn't a hidden command and should be visible in the UI.
+
 ###### Display Name
 Save
 
@@ -294,6 +297,9 @@ def restore (path, restore_method, configuration_type, vrf_management_name)
 
 ###### Description
 Restore a configuration file
+
+###### Notes
+This command isn't a hidden command and should be visible in the UI.
 
 ###### Display Name
 Restore
@@ -317,6 +323,7 @@ Loads a firmware onto the device
 
 ###### Notes
 This command is CLI based and applies to the whole device, also in case of multi-chassis device.
+This command isn't a hidden command and should be visible in the UI.
 
 ###### Display Name
 Load Firmware
@@ -334,6 +341,9 @@ def run_custom_command (custom_command)
 
 ###### Description
 Executes any custom command entered in the input on the device.
+
+###### Notes
+This command isn't a hidden command and should be visible in the UI.
 
 ###### Display Name
 Run Custom Command
@@ -372,6 +382,7 @@ Sends a graceful shutdown to the device.
 
 ###### Notes
 Not all devices support a shutdown command. In such cases the command just won’t be implemented.
+This command isn't a hidden command and should be visible in the UI.
 
 ###### Display Name
 Shutdown
@@ -390,6 +401,7 @@ Configures VLANs on multiple ports or port-channels
 ###### Notes
 Compatible with the connectivity in CloudShell 7.0 version and above. This command will be available in the Shell only when applicable in the device.
 The standard doesn’t support different VLAN request to the same Switch/Router/Wireless-Controller port at the same time. For example, connecting the same port to multiple VLAN services each with a different VLAN ID/range. When configuring VLAN ID/range on a port the assumption is that there is no other VLAN configured on it. 
+This command should be hidden from the UI.
 
 ###### Display Name
 ApplyConnectivityChanges
@@ -412,6 +424,7 @@ Performs checks on the device that validates that the Shell can work. In a netwo
 In case the performed checks fail the live status of the resource should be "Error" and both the live status description and the output of the command should be "Health check on resource [root_resource_name] failed".
 In case all performed checks passed the live status of the resource should be "Online" and both the live status description and the output of the command should be "Health check on resource [root_resource_name] passed".
 CLI check is the check that is currently supported by the networking devices.
+This command isn't a hidden command and should be visible in the UI.
 
 ###### Display Name
 Health Check
