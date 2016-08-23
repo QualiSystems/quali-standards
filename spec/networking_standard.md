@@ -451,8 +451,8 @@ orchestration_save
 ###### Parameters
 Input / Output | Parameter | Alias | Data Type | Required | Description
 --- | --- | --- | --- | --- | ---
-Input | mode | mode | string | Yes | The save mode. Possible values are "Shallow" and "Deep". In a networking device both modes will have the same behavior of saving a configuration file.
-Input | custom_params | custom_params | string | Yes | A JSON data structure with optional parameters. If no parameters are passed the defaults defined on the root resource and in the Save command will be used.
+Input | mode | mode | string | No | The save mode. Possible values are "Shallow" and "Deep". In a networking device both modes will have the same behavior of saving a configuration file.
+Input | custom_params | custom_params | string | No | A JSON data structure with optional parameters. If no parameters are passed the defaults defined on the root resource and in the Save command will be used.
 Output | saved_artifact_info | saved_artifact_info | string | Yes | A composite data structure that represents the details of the snapshot.
 
 An example for the "custom_params" input:
@@ -507,7 +507,7 @@ orchestration_restore
 Input / Output | Parameter | Alias | Data Type | Required | Description
 --- | --- | --- | --- | --- | ---
 Input | saved_artifact_info | saved_artifact_info | string | Yes | A composite data structure that represents the details of the snapshot. The value that will be passed as input must be the same as the exact value that the save function returned.
-Input | custom_params | custom_params | string | Yes | A JSON data structure with optional parameters. If no parameters are passed the defaults defined on the root resource and in the Restore command will be used.
+Input | custom_params | custom_params | string | No | A JSON data structure with optional parameters. If no parameters are passed the defaults defined on the root resource and in the Restore command will be used.
 
 An example for the "custom_params" input:
 
