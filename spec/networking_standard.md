@@ -1,6 +1,6 @@
 # Networking Shell Standard
 
-#### Version 4.0.0
+#### Version 4.0.1
 
 
 ## Introduction
@@ -13,6 +13,7 @@ The standard defines the Shell’s data model, commands and a set of guidelines 
 
 Version | Date | Notes
 --- | --- | ---
+4.0.1 | 2016-08-30 | 1) Added the attributes "Backup Type", "Backup User" and "Backup Password" on the root model. Those attributes are used by the orchestration_save and orchestration_restore commands. 2) Behavior of orchestration_save and orchestration_restore commands has been clarified in the commands' notes and examples.
 4.0.0 | 2016-08-16 | 1) Added a new attribute named “CLI TCP Port” on the root model. That attribute will be filled in by the administrator (optional). 2)  The "Configuration Type" input in the Save and Restore command is now not mandatory, the default value if kept empty is Running. 3) Descriptions were added to the attributes, commands and command inputs (only commands visible in the UI). 4) A “Health check” command was added. This command performs checks on the device that validates that the Shell can work. In a networking device this checks usually include connectivity check for the protocols used by the Shell. 5) Removed the attribute “Protocol Type” from the standard. 6) Added the attributes “Enable SNMP” and “Disable SNMP” on the root model. Those attribute will allow automatic configuration of SNMP before and after the execution of the Autoload command which requires SNMP. 7) The value of the attribute “Bandwidth” is now in MB instead of Bytes. 8) Added orchestration_save and orchestration_restore commands according to the Save and Restore Orchestration Standard. Those commands wrap the Shell’s Save and Restore commands with a standard interface to be used by the Sandbox orchestration. 9) The command name and command input names are now defined in the standard. Prior to this standard version only the command alias and command input aliases were defined. 10) The inputs of the load_firmware command were changed and alligned with the inputs of the restore command. 11) The expected syntax of the path and folder_path inputs of the restore, load_firmware and save commands in case of FTP protocol was clarified. 12) The Add_VLAN and Remove_VLAN commands were removed from the standard. They are replaced by the ApplyConnectivityChanges command. **The 9th and 10th items aren't backwards compatible and will require modification of any existing automation which calls the Shell’s commands. However, upcoming shells will still have the old commands available as hidden command so the shells themselves will remain backwards compatible until their next major verion.**
 3.2.0 | 2016-07-14 | Added a new attribute named "VRF Management Name" on the root model. The attribute will be filled in by the administrator (optional). Save and Restore commands will use the value in this attribute in case no such input was passed to the command.
 3.1.0 | 2016-06-23 | Added a new data model for Wireless Controller (in addition to Switch and Router).
@@ -175,6 +176,9 @@ VRF Management Name | String | Yes | The default VRF Management to use if config
 CLI TCP Port | Numeric | Yes | TCP Port to user for CLI connection. If kept empty a default CLI port will be used based on the chosen protocol, for example Telnet will use port 23.
 Enable SNMP | Boolean | Yes | If set to True and SNMP isn’t enabled yet in the device the Shell will automatically enable SNMP in the device when Autoload command is called. SNMP must be enabled on the device for the Autoload command to run successfully. True by default.
 Disable SNMP | Boolean | Yes | If set to True SNMP will be disabled automatically by the Shell after the Autoload command execution is completed. False by default.
+Backup Type | String | Yes | Supported protocols for saving and restoring of configuration and firmware files. Possible values are "File System", "FTP" and "TFTP". Default value is "File System".
+Backup User | String | Yes | Username for the storage server used for saving and restoring of configuration and firmware files.
+Backup Password | Password | Yes | Password for the storage server used for saving and restoring of configuration and firmware files.
 
 #####  Generic Chassis
 
@@ -286,7 +290,7 @@ Save
 Input / Output | Parameter | Alias | Data Type | Required | Description
 --- | --- | --- | --- | --- | ---
 Input | configuration_type | Configuration Type | string | No | The type of configuration that will be saved. Possible values are StartUp and Running. If kept empty the default configuration type that will be used is Running.
-Input | folder_path | Folder Path | string | No | The path in which the configuration file will be saved. Won't include the name of the file but only the folder. This input is optional and in case this input is empty the value will be taken from the "Backup Location" attribute on the root resource. The path should include the protocol type, for TFTP use "tftp://asdf", for FTP use "ftp://username:password@server_address/folder1/file1.bin".
+Input | folder_path | Folder Path | string | No | The path in which the configuration file will be saved. Shouldn't include the name of the file but only the folder. This input is optional and if empty the value will be taken from the "Backup Location" attribute on the root resource. The path should include the protocol type, for TFTP use "tftp://server_address/folder1", for FTP use "ftp://username:password@server_address/folder1".
 Input | vrf_management_name | VRF Management Name | string | No | Virtual Routing and Forwarding is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. If kept empty the value in the "VRF Management Name" attribute on the root model will be used.
 Output | | | string | Yes | <FullFileName>. The configuration file name should be “[ResourceName]-[ConfigurationType]-[DDMMYY]-[HHMMSS]”.
 
@@ -331,7 +335,7 @@ Load Firmware
 ###### Parameters
 Input / Output | Parameter | Alias | Data Type | Required | Description
 --- | --- | --- | --- | --- | ---
-Input | path | Path | string | Yes | The path to the firmware file, including the firmware file name. The path should include the protocol type, for TFTP use "tftp://asdf", for FTP use "ftp://username:password@server_address/folder1/file1.bin".
+Input | path | Path | string | Yes | The path to the firmware file, including the firmware file name. The path should include the protocol type, for TFTP use "tftp://server_address/folder1/file1.bin", for FTP use "ftp://username:password@server_address/folder1/file1.bin".
 Input | vrf_management_name | VRF Management Name | string | No | Virtual Routing and Forwarding is used to share same/overlapping sub-net on the same core. Service Providers use it to share their backbone with multiple customers and also assign a management VRF which they use to manage the devices. If kept empty the value in the "VRF Management Name" attribute on the root model will be used.
 
 ### Run Custom Command
@@ -443,7 +447,7 @@ def orchestration_save(mode="shallow", custom_params = null)
 Based on the Orchestration Save and Restore Standard - https://github.com/QualiSystems/sandbox_orchestration_standard/blob/master/save%20%26%20restore/save%20%26%20restore%20standard.md
 The command wraps the Save command with a standard interface that will be used by the Sandbox orchestration. This command will call the Save command which will create a configuration file.
 The command should be hidden from the UI.
-In case there is no folder_path input and the attribute "Backup Location" on the root model is empty the command should throw an error.
+The backup type used is defined in the "Backup Type" attribute on the root resource (File System, FTP or TFTP), and the path in which to save the configuration file is defined in the "Backup Location" attribute on the root resource. In case the value of the attribute "Backup Location" is empty the command should throw an error. In case the backup type is FTP the user and password for the FTP server should be taken from the "Backup User" and "Backup Password" attributes on the root resource.
 
 ###### Display Name
 orchestration_save
@@ -461,7 +465,6 @@ An example for the "custom_params" input:
 {
   "custom_params": {
     "configuration_type" : "StartUp"
-    "folder_path" : "tftp://10.0.0.1/folder1"
     "vrf_management_name": "network-1"
   }
 }
@@ -472,22 +475,19 @@ An example for the "saved_artifact_info" output:
 {
   "saved_artifact_info": {
     "resource_name": "CiscoNXOSSwitch1",
-    "resource_id" : "5F2EAA6C-E3FD-4DF0-8E2D-F05C81D61631",
     "created_date": "3577-04-27T00:17:48.819Z",
     "restore_rules": {
       "requires_same_resource": true
     },    
     "saved_artifact" :{
       "artifact_type": "tftp",
-      "identifier": "/folder1/CiscoNXOSSwitch1-Running-080816-13:20:53",
-      "server": "server1"
+      "identifier": "//tftp_serv1/folder1/CiscoNXOSSwitch1-Running-080816-13:20:53",
     }
   }
 }
 ```
 
-The artifact types supported by Networking orchestration_save command are "ftp", "tftp" and "filesystem".
-The "requires_same_resource" restore rule for Networking devices is always True.
+Notes: The artifact types supported by Networking orchestration_save command are "ftp", "tftp" and "filesystem". The "requires_same_resource" restore rule for Networking devices is always True. The "created_date" refers to the creation date of the snapshot.
 
 ### orchestration_restore
 ```python
@@ -498,7 +498,7 @@ def orchestration_restore(saved_artifact_info, custom_params = null)
 Based on the Orchestration Save and Restore Standard - https://github.com/QualiSystems/sandbox_orchestration_standard/blob/master/save%20%26%20restore/save%20%26%20restore%20standard.md
 The command wraps the Restore command with a standard interface that will be used by the Sandbox orchestration. This command will call the Save command which will create a configuration file.
 The command should be hidden from the UI.
-In case the saved artifact type is FTP the FTP credentials are saved on the FTP resource, so the orchestration_restore command will access the FTP resource to get them and pass them to the Restore command.
+In case the saved artifact type is FTP the FTP credentials should be available in the attributes "Backup User" and "Backup Password" on the root resource.
 
 ###### Display Name
 orchestration_restore
@@ -514,7 +514,6 @@ An example for the "custom_params" input:
 ```json
 {
   "custom_params": {
-    "path" : "tftp://10.0.0.1/folder1"
     "restore_method" : "Append"
     "configuration_type" : "StartUp"
     "vrf_management_name": "network-1"
@@ -527,19 +526,16 @@ An example for the "saved_artifact_info" input:
 {
   "saved_artifact_info": {
     "resource_name": "CiscoNXOSSwitch1",
-    "resource_id" : "5F2EAA6C-E3FD-4DF0-8E2D-F05C81D61631",
     "created_date": "3577-04-27T00:17:48.819Z",
     "restore_rules": {
       "requires_same_resource": true
     },    
     "saved_artifact" :{
       "artifact_type" : "ftp",
-      "ftp_resource" : "ftp_srv1", 
-      "identifier": "/folder1/CiscoNXOSSwitch1-Running-080816-13:20:53"
+      "identifier": "//ftp_srv1/folder1/CiscoNXOSSwitch1-Running-080816-13:20:53"
     }
   }
 }
 ```
 
-The artifact types supported by Networking orchestration_restore command are "ftp", "tftp" and "filesystem".
-The "requires_same_resource" restore rule for Networking devices is always True.
+Notes: The artifact types supported by Networking orchestration_restore command are "ftp", "tftp" and "filesystem". The "requires_same_resource" restore rule for Networking devices is always True. The "created_date" refers to the creation date of the snapshot.
