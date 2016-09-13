@@ -25,7 +25,7 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         pass
 
     # <editor-fold desc="Networking Standard Commands">
-    def restore(self, context, cancellation_context, path, restore_method, configuration_type, vrf_management_name):
+    def restore(self, context, cancellation_context, path, configuration_type, restore_method, vrf_management_name):
         """
         Restores a configuration file
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
@@ -37,7 +37,7 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         """
         pass
 
-    def save(self, context, cancellation_context, configuration_type, folder_path, vrf_management_name):
+    def save(self, context, cancellation_context, folder_path, configuration_type, vrf_management_name):
         """
         Creates a configuration file and saves it to the provided destination
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
@@ -50,12 +50,12 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         """
         pass
 
-    def load_firmware(self, context, cancellation_context, file_path, remote_host):
+    def load_firmware(self, context, cancellation_context, path, vrf_management_name):
         """
         Upload and updates firmware on the resource
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
-        :param str remote_host: path to tftp server where firmware file is stored
-        :param str file_path: firmware file name
+        :param str path: path to tftp server where firmware file is stored
+        :param str vrf_management_name: Optional. Virtual routing and Forwarding management name
         """
         pass
 
@@ -92,7 +92,7 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
     # </editor-fold>
 
     # <editor-fold desc="Orchestration Save and Restore Standard">
-    def orchestration_save(self, context, cancellation_context, mode, custom_params=None):
+    def orchestration_save(self, context, cancellation_context, mode, custom_params):
         """
         Saves the Shell state and returns a description of the saved artifacts and information
         This command is intended for API use only by sandbox orchestration scripts to implement
@@ -135,12 +135,13 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         '''
         pass
 
-    def orchestration_restore(self, context, cancellation_context, saved_details):
+    def orchestration_restore(self, context, cancellation_context, saved_artifact_info, custom_params):
         """
         Restores a saved artifact previously saved by this Shell driver using the orchestration_save function
         :param ResourceCommandContext context: The context object for the command with resource and reservation info
         :param CancellationContext cancellation_context: Object to signal a request for cancellation. Must be enabled in drivermetadata.xml as well
-        :param str saved_details: A JSON string representing the state to restore including saved artifacts and info
+        :param str saved_artifact_info: A JSON string representing the state to restore including saved artifacts and info
+        :param str custom_params: Set of custom parameters for the restore operation
         :return: None
         """
         '''
@@ -235,8 +236,7 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
     def health_check(self,cancellation_context):
         """
         Checks if the device is up and connectable
-        :return: None
-        :exception Exception: Raises an error if cannot connect
+        :return: str: Success or fail message
         """
         pass
 
