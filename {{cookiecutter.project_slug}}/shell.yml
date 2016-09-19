@@ -5,3 +5,4 @@ shell:
     description: {{cookiecutter.project_short_description}}
     version: {{cookiecutter.version}}
     driver_name: {{cookiecutter.driver_name}}
+    networking_standard_version: 4.0.1
