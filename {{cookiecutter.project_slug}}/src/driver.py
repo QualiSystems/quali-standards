@@ -1,11 +1,13 @@
 import datetime
 import json
+
+from cloudshell.networking.apply_connectivity.apply_connectivity_operation import apply_connectivity_changes
+from cloudshell.networking.apply_connectivity.models.connectivity_result import ConnectivitySuccessResponse
 from cloudshell.shell.core.interfaces.save_restore import OrchestrationSaveResult, OrchestrationSavedArtifact, \
     OrchestrationSavedArtifactInfo, OrchestrationRestoreRules
 from cloudshell.shell.core.resource_driver_interface import ResourceDriverInterface
 from cloudshell.shell.core.driver_context import InitCommandContext, ResourceCommandContext, AutoLoadResource, \
     AutoLoadAttribute, AutoLoadDetails, CancellationContext
-
 
 class {{cookiecutter.driver_name}} (ResourceDriverInterface):
 
@@ -182,7 +184,11 @@ class {{cookiecutter.driver_name}} (ResourceDriverInterface):
         :rtype: str
         """
 
-        pass
+        return apply_connectivity_changes(request=request,
+                                          add_vlan_action=lambda x: ConnectivitySuccessResponse(x,'Success'),
+                                          remove_vlan_action=lambda x: ConnectivitySuccessResponse(x,'Success'))
+
+
 
     '''
 
