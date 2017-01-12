@@ -1,6 +1,6 @@
 # Networking Shell Standard
 
-#### Version 4.0.1
+#### Version 4.0.2
 
 
 ## Introduction
@@ -13,6 +13,7 @@ The standard defines the Shell’s data model, commands and a set of guidelines 
 
 Version | Date | Notes
 --- | --- | ---
+4.0.2 | 2017-01-12 | fixed the following minor bugs: 158339, 158329, 158328, 158327, 158326, 158325158325, 158324, 158323.
 4.0.1 | 2016-08-30 | 1) Added the attributes "Backup Type", "Backup User" and "Backup Password" on the root model. Those attributes are used by the orchestration_save and orchestration_restore commands. 2) Behavior of orchestration_save and orchestration_restore commands has been clarified in the commands' notes and examples.
 4.0.0 | 2016-08-16 | 1) Added a new attribute named “CLI TCP Port” on the root model. That attribute will be filled in by the administrator (optional). 2)  The "Configuration Type" input in the Save and Restore command is now not mandatory, the default value if kept empty is Running. 3) Descriptions were added to the attributes, commands and command inputs (only commands visible in the UI). 4) A “Health check” command was added. This command performs checks on the device that validates that the Shell can work. In a networking device this checks usually include connectivity check for the protocols used by the Shell. 5) Removed the attribute “Protocol Type” from the standard. 6) Added the attributes “Enable SNMP” and “Disable SNMP” on the root model. Those attribute will allow automatic configuration of SNMP before and after the execution of the Autoload command which requires SNMP. 7) The value of the attribute “Bandwidth” is now in MB instead of Bytes. 8) Added orchestration_save and orchestration_restore commands according to the Save and Restore Orchestration Standard. Those commands wrap the Shell’s Save and Restore commands with a standard interface to be used by the Sandbox orchestration. 9) The command name and command input names are now defined in the standard. Prior to this standard version only the command alias and command input aliases were defined. 10) The inputs of the load_firmware command were changed and alligned with the inputs of the restore command. 11) The expected syntax of the path and folder_path inputs of the restore, load_firmware and save commands in case of FTP protocol was clarified. 12) The Add_VLAN and Remove_VLAN commands were removed from the standard. They are replaced by the ApplyConnectivityChanges command. **The 9th and 10th items aren't backwards compatible and will require modification of any existing automation which calls the Shell’s commands. However, upcoming shells will still have the old commands available as hidden command so the shells themselves will remain backwards compatible until their next major verion.**
 3.2.0 | 2016-07-14 | Added a new attribute named "VRF Management Name" on the root model. The attribute will be filled in by the administrator (optional). Save and Restore commands will use the value in this attribute in case no such input was passed to the command.
@@ -112,6 +113,19 @@ Port | Searchable, Connectable, Locked By Default
 Port Channel | Searchable, Connectable, Locked By Default
 Power Port | Searchable, Connectable, Locked By Default
 
+##### Swicth Rules
+
+Rule | Value
+--- | ---
+SupportsConcurrentCommands | True
+isPowerSwitch | False
+
+##### Router Rules
+
+Rule | Value
+--- | ---
+SupportsConcurrentCommands | True
+isPowerSwitch | False
 
 #### Port Channel Usage
 
@@ -139,7 +153,7 @@ Note: The [ID] for each sub-resource is taken from the device itself (correspond
 #### Guidelines
 - Attributes which aren’t relevant to a devices won’t be populated by the driver.
 - All attributes which aren't user-input are "read only"
-- The attribute rules are as follows - all attributes which are user input should have the rule "Configuration" enabled, all attributes which aren't user input should have the rules "Settings" and "Available For Abstract Resources" enabled.
+- The attribute rules are as follows - 1) all attributes which are user input should have the rule "Configuration" enabled, all attributes which aren't user input should have the rules "Settings" and "Available For Abstract Resources" enabled. 2) All attributes should have isOverridable as true. 3) All attributes should have isLocal as true. 4) All attributes should have Override as false.
 - It is possible to customize the attribute rules selection after importing the Shell to CloudShell.
 - Attributes shouldn’t be removed.
 - Custom attributes should be added only to the root level model.
@@ -166,7 +180,7 @@ SNMP V3 Private Key | String | Yes | Relevant only in case SNMP V3 is in use.
 SNMP Version | String | Yes | The version of SNMP to use. Possible values are v1, v2c and v3.
 Console Server IP Address | String | Yes | The IP address of the console server, in IPv4 format.
 Console User | String | Yes |
-Console Port | Numeric | Yes | The port on the console server, usually TCP port, which the device is associated with.
+Console Port | Numeric | Yes | The port on the console server, usually TCP port, which the device is associated with. Default is 0.
 Console Password | Password | Yes |
 CLI Connection Type | Lookup | Yes | The CLI connection type that will be used by the driver. Possible values are Auto, Console, SSH, Telnet and TCP. If Auto is selected the driver will choose the available connection type automatically. Default value is Auto.
 Power Management | Boolean | Yes | Used by the power management orchestration, if enabled, to determine whether to automatically manage the device power status. Enabled by default.
@@ -274,7 +288,7 @@ Output | AutoLoadDetails | - | object | Yes | object of type AutoLoadDetails wit
 
 ### Save
 ```python
-def save (folder_path, configuration_type, vrf_management_name)
+def save (folder_path, configuration_type, vrf_management_name, self, context)
 ```
 
 ###### Description
@@ -296,7 +310,7 @@ Output | | | string | Yes | <FullFileName>. The configuration file name should b
 
 ### Restore
 ```python
-def restore (path, configuration_type, restore_method, vrf_management_name)
+def restore (path, configuration_type, restore_method, vrf_management_name, self, context)
 ```
 
 ###### Description
@@ -319,7 +333,7 @@ Input | vrf_management_name | VRF Management Name | string | No | Virtual Routin
 
 ### Load Firmware
 ```python
-def load_firmware (path, vrf_management_name)
+def load_firmware (path, vrf_management_name, self, context)
 ```
 
 ###### Description
@@ -340,7 +354,7 @@ Input | vrf_management_name | VRF Management Name | string | No | Virtual Routin
 
 ### Run Custom Command
 ```python
-def run_custom_command (custom_command)
+def run_custom_command (custom_command, self, context)
 ```
 
 ###### Description
@@ -359,7 +373,7 @@ Input | custom_command | Custom Command | string | Yes | The command to execute.
 
 ### Run Custom Config Command
 ```python
-def run_custom_config_command (custom_command)
+def run_custom_config_command (custom_command, self, context)
 ```
 
 ###### Description
@@ -378,7 +392,7 @@ Input | custom_command | Custom Command | string | Yes | The command to execute.
 
 ### Shutdown
 ```python
-def shutdown()
+def shutdown(self, context)
 ```
 
 ###### Description
@@ -396,7 +410,7 @@ No input parameters.
 
 ### ApplyConnectivityChanges
 ```python
-def ApplyConnectivityChanges(request)
+def ApplyConnectivityChanges(request, self, context)
 ```
 
 ###### Description
@@ -418,7 +432,7 @@ Output | | | string | Yes | a JSON with the command’s response, should include
 
 ### Health Check
 ```python
-def health_check()
+def health_check(self, context)
 ```
 
 ###### Description
@@ -440,7 +454,7 @@ Output | | | string | Yes | The health check result
 
 ### orchestration_save
 ```python
-def orchestration_save(mode="shallow", custom_params = null)
+def orchestration_save(mode="shallow", custom_params = null, self, context)
 ```
 
 ###### Notes
@@ -464,8 +478,8 @@ An example for the "custom_params" input:
 ```json
 {
   "custom_params": {
-    "configuration_type" : "StartUp"
-    "vrf_management_name": "network-1"
+    "configuration_type" : "StartUp",
+    "vrf_management_name": "network-1",
   }
 }
 ```
@@ -491,7 +505,7 @@ Notes: The artifact types supported by Networking orchestration_save command are
 
 ### orchestration_restore
 ```python
-def orchestration_restore(saved_artifact_info, custom_params = null)
+def orchestration_restore(saved_artifact_info, custom_params = null, self, context)
 ```
 
 ###### Notes
@@ -514,9 +528,9 @@ An example for the "custom_params" input:
 ```json
 {
   "custom_params": {
-    "restore_method" : "Append"
-    "configuration_type" : "StartUp"
-    "vrf_management_name": "network-1"
+    "restore_method" : "Append",
+    "configuration_type" : "StartUp",
+    "vrf_management_name": "network-1",
   }
 }
 ```
