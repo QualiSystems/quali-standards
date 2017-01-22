@@ -288,7 +288,7 @@ Output | AutoLoadDetails | - | object | Yes | object of type AutoLoadDetails wit
 
 ### Save
 ```python
-def save (folder_path, configuration_type, vrf_management_name, self, context)
+def save (self, context, folder_path, configuration_type, vrf_management_name)
 ```
 
 ###### Description
@@ -310,7 +310,7 @@ Output | | | string | Yes | <FullFileName>. The configuration file name should b
 
 ### Restore
 ```python
-def restore (path, configuration_type, restore_method, vrf_management_name, self, context)
+def restore (self, context, path, configuration_type, restore_method, vrf_management_name)
 ```
 
 ###### Description
@@ -333,7 +333,7 @@ Input | vrf_management_name | VRF Management Name | string | No | Virtual Routin
 
 ### Load Firmware
 ```python
-def load_firmware (path, vrf_management_name, self, context)
+def load_firmware (self, context, path, vrf_management_name)
 ```
 
 ###### Description
@@ -354,7 +354,7 @@ Input | vrf_management_name | VRF Management Name | string | No | Virtual Routin
 
 ### Run Custom Command
 ```python
-def run_custom_command (custom_command, self, context)
+def run_custom_command (self, context, custom_command)
 ```
 
 ###### Description
@@ -373,7 +373,7 @@ Input | custom_command | Custom Command | string | Yes | The command to execute.
 
 ### Run Custom Config Command
 ```python
-def run_custom_config_command (custom_command, self, context)
+def run_custom_config_command (self, context, custom_command)
 ```
 
 ###### Description
@@ -410,7 +410,7 @@ No input parameters.
 
 ### ApplyConnectivityChanges
 ```python
-def ApplyConnectivityChanges(request, self, context)
+def ApplyConnectivityChanges(self, context, request)
 ```
 
 ###### Description
@@ -454,7 +454,7 @@ Output | | | string | Yes | The health check result
 
 ### orchestration_save
 ```python
-def orchestration_save(mode="shallow", custom_params = null, self, context)
+def orchestration_save(self, context, mode="shallow", custom_params = null)
 ```
 
 ###### Notes
@@ -505,7 +505,7 @@ Notes: The artifact types supported by Networking orchestration_save command are
 
 ### orchestration_restore
 ```python
-def orchestration_restore(saved_artifact_info, custom_params = null, self, context)
+def orchestration_restore(self, context, saved_artifact_info, custom_params = null)
 ```
 
 ###### Notes
