@@ -479,7 +479,7 @@ An example for the "custom_params" input:
 {
   "custom_params": {
     "configuration_type" : "StartUp",
-    "vrf_management_name": "network-1",
+    "vrf_management_name": "network-1"
   }
 }
 ```
@@ -489,13 +489,13 @@ An example for the "saved_artifact_info" output:
 {
   "saved_artifact_info": {
     "resource_name": "CiscoNXOSSwitch1",
-    "created_date": "3577-04-27T00:17:48.819Z",
+    "created_date": "3577-04-27T00:17:48.819Z"
     "restore_rules": {
       "requires_same_resource": true
     },    
     "saved_artifact" :{
       "artifact_type": "tftp",
-      "identifier": "//tftp_serv1/folder1/CiscoNXOSSwitch1-Running-080816-13:20:53",
+      "identifier": "//tftp_serv1/folder1/CiscoNXOSSwitch1-Running-080816-13:20:53"
     }
   }
 }
@@ -530,7 +530,7 @@ An example for the "custom_params" input:
   "custom_params": {
     "restore_method" : "Append",
     "configuration_type" : "StartUp",
-    "vrf_management_name": "network-1",
+    "vrf_management_name": "network-1"
   }
 }
 ```
@@ -540,7 +540,7 @@ An example for the "saved_artifact_info" input:
 {
   "saved_artifact_info": {
     "resource_name": "CiscoNXOSSwitch1",
-    "created_date": "3577-04-27T00:17:48.819Z",
+    "created_date": "3577-04-27T00:17:48.819Z"
     "restore_rules": {
       "requires_same_resource": true
     },    
