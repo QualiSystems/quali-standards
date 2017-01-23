@@ -1,6 +1,6 @@
 # Networking Shell Standard
 
-#### Version 4.0.2
+#### Version 5.0.0
 
 
 ## Introduction
@@ -13,6 +13,7 @@ The standard defines the Shell’s data model, commands and a set of guidelines 
 
 Version | Date | Notes
 --- | --- | ---
+5.0.0 | 2017-01-23 | 1) Added letters to resources address. This change is NOT backword compitible. 2) Changed the type of the following attributes to "Password": "SNMP Read Community", "SNMP Write Community" and "SNMP V3 Password".
 4.0.2 | 2017-01-12 | fixed the following minor bugs: 158339, 158329, 158328, 158327, 158326, 158325158325, 158324, 158323.
 4.0.1 | 2016-08-30 | 1) Added the attributes "Backup Type", "Backup User" and "Backup Password" on the root model. Those attributes are used by the orchestration_save and orchestration_restore commands. 2) Behavior of orchestration_save and orchestration_restore commands has been clarified in the commands' notes and examples.
 4.0.0 | 2016-08-16 | 1) Added a new attribute named “CLI TCP Port” on the root model. That attribute will be filled in by the administrator (optional). 2)  The "Configuration Type" input in the Save and Restore command is now not mandatory, the default value if kept empty is Running. 3) Descriptions were added to the attributes, commands and command inputs (only commands visible in the UI). 4) A “Health check” command was added. This command performs checks on the device that validates that the Shell can work. In a networking device this checks usually include connectivity check for the protocols used by the Shell. 5) Removed the attribute “Protocol Type” from the standard. 6) Added the attributes “Enable SNMP” and “Disable SNMP” on the root model. Those attribute will allow automatic configuration of SNMP before and after the execution of the Autoload command which requires SNMP. 7) The value of the attribute “Bandwidth” is now in MB instead of Bytes. 8) Added orchestration_save and orchestration_restore commands according to the Save and Restore Orchestration Standard. Those commands wrap the Shell’s Save and Restore commands with a standard interface to be used by the Sandbox orchestration. 9) The command name and command input names are now defined in the standard. Prior to this standard version only the command alias and command input aliases were defined. 10) The inputs of the load_firmware command were changed and alligned with the inputs of the restore command. 11) The expected syntax of the path and folder_path inputs of the restore, load_firmware and save commands in case of FTP protocol was clarified. 12) The Add_VLAN and Remove_VLAN commands were removed from the standard. They are replaced by the ApplyConnectivityChanges command. **The 9th and 10th items aren't backwards compatible and will require modification of any existing automation which calls the Shell’s commands. However, upcoming shells will still have the old commands available as hidden command so the shells themselves will remain backwards compatible until their next major verion.**
@@ -139,10 +140,10 @@ Family | Model | Resource Name | Resource Address
 Switch | [Vendor] [OS] Switch | (user defined) | (user defined - IP)
 Router | [Vendor] [OS] Router | (user defined) | (user defined - IP)
 Wireless Controller | [Vendor] [OS] Wireless Controller | (user defined) | (user defined - IP)
-Chassis | Generic Chassis | Chassis[ID] | [ID]
-Module | Generic Module | Module[ID] | [ID]
-Sub Module | Generic Sub Module | SubModule[ID] | [ID]
-Port | Generic Port | The name of the interface as appears in the device. Any “/” character is replaced with “-“, spaces trimmed.] | [ID]
+Chassis | Generic Chassis | Chassis[ID] | CH[ID]
+Module | Generic Module | Module[ID] | MO[ID]
+Sub Module | Generic Sub Module | SubModule[ID] | SM[ID]
+Port | Generic Port | The name of the interface as appears in the device. Any “/” character is replaced with “-“, spaces trimmed.] | PO[ID]
 Port Channel | Generic Port Channel | The name of the interface as appears in the device. Any “/” character is replaced with “-“, spaces trimmed. | PC[ID]
 Power Port | Generic Power Port | PP[ContainerID][ID] | PP[ContainerID][ID]
 
@@ -172,10 +173,10 @@ OS Version | String | No | Version of the Operating System.
 Vendor | String | No | The name of the device manufacture.
 Location | String | No | The device physical location identifier. For example Lab1/Floor2/Row5/Slot4.
 Model | String | No | The device model. This information is typically used for abstract resource filtering.
-SNMP Read Community | String | Yes | The SNMP Read-Only Community String is like a password. It is sent along with each SNMP Get-Request and allows (or denies) access to device.
-SNMP Write Community | String | Yes | The SNMP Write Community String is like a password. It is sent along with each SNMP Set-Request and allows (or denies) chaning MIBs values.
+SNMP Read Community | Password | Yes | The SNMP Read-Only Community String is like a password. It is sent along with each SNMP Get-Request and allows (or denies) access to device.
+SNMP Write Community | Password | Yes | The SNMP Write Community String is like a password. It is sent along with each SNMP Set-Request and allows (or denies) chaning MIBs values.
 SNMP V3 User | String | Yes | Relevant only in case SNMP V3 is in use.
-SNMP V3 Password | String | Yes | Relevant only in case SNMP V3 is in use.
+SNMP V3 Password | Password | Yes | Relevant only in case SNMP V3 is in use.
 SNMP V3 Private Key | String | Yes | Relevant only in case SNMP V3 is in use.
 SNMP Version | String | Yes | The version of SNMP to use. Possible values are v1, v2c and v3.
 Console Server IP Address | String | Yes | The IP address of the console server, in IPv4 format.
