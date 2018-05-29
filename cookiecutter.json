@@ -3,8 +3,8 @@
 	"email": "info@quali.com",
 	"github_username": "qualisystemslab",
 	"category" : "App Management",
-	"project_name": "Shell",
-	"family_name" : "Family",
+	"project_name": "",
+	"family_name" : ["Switch", "Router"],
 	"project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-','_') }}",
 	"model_name" : "{{ cookiecutter.project_slug.replace('_', ' ').title().replace(' ','') }}",
 	"driver_name" : "{{ cookiecutter.model_name }}Driver",
@@ -14,5 +14,8 @@
 	"year": "2016",
 	"version": "0.1.0",
 	"server_version" : "7.0",
-	"use_pypi_deployment_with_travis": "y"
+	"use_pypi_deployment_with_travis": "y",
+    "template_name" : "gen1/networking",
+    "template_descr" : "1st generation shell template for a standard switch",
+    "template_repository" : "https://github.com/QualiSystems/shell-networking-standard"
 }
